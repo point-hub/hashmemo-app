@@ -1,0 +1,27 @@
+{
+  "eslint.useFlatConfig": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit"
+  },
+  "css.customData": [".vscode/unocss.json"],
+  "files.associations": {
+    "*.css": "postcss"
+  },
+  // Cypress cucumber file location
+  "cucumber.glue": ["cypress/e2e/**/*.ts"],
+  // Visual Studio Code Intellisense running very slow without this setting
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  }
+}
