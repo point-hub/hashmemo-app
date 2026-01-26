@@ -12,8 +12,6 @@ import CardActions from '../components/card-actions.vue';
 import CardBreadcrumbs from './card-breadcrumbs.vue';
 import CardEmail from './card-email.vue';
 import CardForm from './card-form.vue';
-import CardInternalNotes from './card-internal-notes.vue';
-import CardPhoto from './card-photo.vue';
 import CardRole from './card-role.vue';
 import { useForm } from './form';
 
@@ -87,8 +85,6 @@ const onRestored = async () => {
       <card-form v-model:data="form.data" />
       <card-email v-model:data="form.data" />
       <card-role v-model:data="form.data" />
-      <card-photo v-model:data="form.data" />
-      <card-internal-notes v-model:data="form.data" />
     </template>
   </app-container>
 </template>
