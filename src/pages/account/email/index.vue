@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 
 import AppContainer from '@/components/app-container.vue';
+import PasswordConfirmationModal from '@/components/password-confirmation-modal/index.vue';
 import { findUserApi } from '@/composables/api/master/users/find-by-id.api';
 import { updateEmailUserApi } from '@/composables/api/master/users/update-email.api';
 import { useAuthStore } from '@/stores/auth.store';
@@ -56,16 +57,26 @@ const onSave = async () => {
     isSaving.value = false;
   }
 };
+
+const onSubmit = () => {
+  passwordConfirmationModalRef.value.toggleModal();
+};
+
+const passwordConfirmationModalRef = ref();
+const onPasswordConfirmed = async () => {
+  await onSave();
+};
 </script>
 
 <template>
+  <password-confirmation-modal ref="passwordConfirmationModalRef" @confirmed="onPasswordConfirmed" />
   <app-container :is-loading="isLoading">
     <card-breadcrumbs />
 
     <card-email v-model:data="form.data" v-model:errors="form.errors" v-model:is-saving="isSaving" />
 
     <div class="flex gap-2">
-      <base-button class="flex-1" :is-loading="isSaving" color="primary" @click="onSave">Save</base-button>
+      <base-button class="flex-1" :is-loading="isSaving" color="primary" @click="onSubmit">Save</base-button>
     </div>
   </app-container>
 </template>
