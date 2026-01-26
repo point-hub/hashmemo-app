@@ -8,7 +8,7 @@ export default {
     {
       path: '',
       component: () => import('./index.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     exampleRoutes,
     userRoutes,

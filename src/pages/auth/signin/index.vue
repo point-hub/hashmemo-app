@@ -16,6 +16,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const isLoading = ref(false);
+const photoCode = ref();
+
 const onSubmit = async () => {
   try {
     isLoading.value = true;
@@ -26,6 +28,9 @@ const onSubmit = async () => {
   } catch (error) {
     const errorResponse = handleError(error);
     if (errorResponse.errors) {
+      if (errorResponse.message === 'Photo is not verified') {
+        photoCode.value = errorResponse.errors.photo_code?.[0];
+      }
       form.errors.value.username = errorResponse.errors.username || [];
       form.errors.value.password = errorResponse.errors.password || [];
       return;
@@ -50,10 +55,25 @@ const onSubmit = async () => {
         <h1 class="font-semibold text-2xl">Sign in</h1>
 
         <div class="flex flex-col gap-4">
-          <base-input autofocus :disabled="isLoading" v-model="form.data.value.username"
-            :errors="form.errors.value.username" label="Username / Email" border="simple" layout="vertical" />
-          <base-input :disabled="isLoading" :type="password.type" v-model="form.data.value.password"
-            :errors="form.errors.value.password" label="Password" border="simple" layout="vertical">
+          <base-input
+            autofocus
+            :disabled="isLoading"
+            v-model="form.data.value.username"
+            :errors="form.errors.value.username"
+            label="Username / Email"
+            border="simple"
+            layout="vertical"
+          />
+          <router-link v-if="photoCode"  :to="`/verify-photo?code=${photoCode}`" class="text-blue-600 ">Verify Photo</router-link>
+          <base-input
+            :disabled="isLoading"
+            :type="password.type"
+            v-model="form.data.value.password"
+            :errors="form.errors.value.password"
+            label="Password"
+            border="simple"
+            layout="vertical"
+          >
             <template #suffix>
               <BaseButton @click="password.toggle" variant="text" color="secondary">
                 <BaseIcon icon="i-fa7-regular:eye" />

@@ -26,7 +26,9 @@ const sidebarStore = useSidebarStore();
 const sidebarMenuStore = useSidebarMenuStore();
 const { isDarkMode, toggleDarkMode } = useDarkMode();
 const authStore = useAuthStore();
+
 const { subscribe } = useAblyChannel(`notifications:${authStore.authUser?._id}`);
+const isHeaderMenuOpen = ref(false);
 
 // Sidebar
 const appMenu = ref<IAppMenu[]>([
@@ -39,20 +41,20 @@ const appMenu = ref<IAppMenu[]>([
         name: 'Home',
         path: '/home',
       },
-      {
-        name: 'Master',
-        submenu: [
-          { name: 'Users', path: '/master/users' },
-          { name: 'Roles', path: '/master/roles' },
-          { name: 'Examples', path: '/master/examples' },
-        ],
-      },
-      {
-        name: 'Administrator',
-        submenu: [
-          { name: 'Audit Logs', path: '/administrator/audit-logs' },
-        ],
-      },
+      // {
+      //   name: 'Master',
+      //   submenu: [
+      //     { name: 'Users', path: '/master/users' },
+      //     // { name: 'Roles', path: '/master/roles' },
+      //     // { name: 'Examples', path: '/master/examples' },
+      //   ],
+      // },
+      // {
+      //   name: 'Administrator',
+      //   submenu: [
+      //     { name: 'Audit Logs', path: '/administrator/audit-logs' },
+      //   ],
+      // },
     ],
   },
 ]);
@@ -66,18 +68,9 @@ const appList = ref<IAppMenu[]>([
 sidebarMenuStore.setAppMenu(appMenu.value, appList.value);
 
 // Header
-const account = ref({
-  organization: 'Acme Corp',
-  username: authStore.authUser?.username,
-  avatar: 'https://placehold.co/150',
-});
+const account = ref();
 
-const organizations = ref([
-  {
-    name: 'Acme Corp',
-    link: '?org=abc',
-  },
-]);
+const organizations = ref();
 
 const onSignout = async () => {
   await authStore.signout();
@@ -88,6 +81,20 @@ onMounted(() => {
   subscribe();
   sidebarMenuStore.onChooseApp(route.path);
 
+  account.value = {
+    organization: 'Hash Memo',
+    username: authStore.authUser?.username,
+    avatar: 'https://placehold.co/150',
+  };
+
+  if (authStore.authUser?.role?.name === 'admin') {
+    appMenu.value[0]?.menu?.push({
+      name: 'Master',
+      submenu: [
+        { name: 'Users', path: '/master/users' },
+      ],
+    });
+  }
 });
 </script>
 
@@ -104,9 +111,10 @@ onMounted(() => {
       <template #right-header>
         <app-header-notifications />
         <base-divider class="h-10" orientation="horizontal" />
-        <header-menu :organization="account.organization" :username="account.username" :avatar="account.avatar">
-          <header-menu-account :organization="account.organization" :username="account.username" :avatar="account.avatar" />
+        <header-menu v-model:is-open="isHeaderMenuOpen" :organization="account?.organization" :username="account?.username" :avatar="authStore.authUser?.photo_url">
+          <header-menu-account :organization="account?.organization" :username="account?.username" :avatar="authStore.authUser?.photo_url" />
           <base-divider orientation="vertical" class="my-2!" />
+          <header-menu-link label="My Account" icon="i-ph:user-circle-gear-duotone" path="/account" @click="() => isHeaderMenuOpen = false" />
           <header-menu-switch-organization :organizations="organizations" />
           <header-menu-dark-mode :on-toggle-dark-mode="toggleDarkMode" v-model:is-dark-mode="isDarkMode" />
           <header-menu-signout :on-signout="onSignout" />

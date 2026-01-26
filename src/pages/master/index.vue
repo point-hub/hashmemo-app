@@ -17,8 +17,8 @@ const menus = ref<IMenu[]>([]);
 
 onMounted(() => {
   menus.value.push({ name: 'Users', path: '/master/users', icon: 'i-fa7-solid:address-card' });
-  menus.value.push({ name: 'Roles', path: '/master/roles', icon: 'i-fa7-solid:user-gear' });
-  menus.value.push({ name: 'Examples', path: '/master/examples', icon: 'i-fa7-solid:books' });
+  // menus.value.push({ name: 'Roles', path: '/master/roles', icon: 'i-fa7-solid:user-gear' });
+  // menus.value.push({ name: 'Examples', path: '/master/examples', icon: 'i-fa7-solid:books' });
 });
 </script>
 

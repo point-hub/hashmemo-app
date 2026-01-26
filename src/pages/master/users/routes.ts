@@ -4,37 +4,37 @@ export default {
     {
       path: '',
       component: () => import('./list/index.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: 'create',
       component: () => import('./create/index.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: ':id',
       component: () => import('./details/index.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: ':id/edit',
       component: () => import('./edit/index.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: ':id/histories',
       component: () => import('./histories/index.vue'),
-      meta: { requiresAuth: true, permission: 'roles:read' },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: ':id/audits',
       component: () => import('./audits/index.vue'),
-      meta: { requiresAuth: true, permission: 'audit-logs:read' },
+      meta: { requiresAuth: true, role: 'admin' },
     },
     {
       path: ':id/field-histories/:field',
       component: () => import('./field-histories/index.vue'),
-      meta: { requiresAuth: true, permission: 'roles:read' },
+      meta: { requiresAuth: true, role: 'admin' },
     },
   ],
 };

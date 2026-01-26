@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import authConfig from '@/config/auth';
+import routesAccount from '@/pages/account/routes';
 import routesAdministrator from '@/pages/administrator/routes';
 import routesAuth from '@/pages/auth/routes';
 import routesMaster from '@/pages/master/routes';
@@ -25,6 +26,7 @@ const router = createRouter({
               component: () => import('@/pages/home.vue'),
               meta: { requiresAuth: true },
             },
+            routesAccount,
             routesMaster,
             routesAdministrator,
           ],
@@ -75,7 +77,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // check if user has permission to access route
-  if (to.meta.permission && !authStore.hasPermission(to.meta.permission.toString())) {
+  if (to.meta.role && !authStore.hasRole(to.meta.role.toString())) {
     return next('/403');
   }
 

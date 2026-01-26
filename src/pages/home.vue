@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 
 import AppMenu, { type IMenu } from '@/components/app-menu.vue';
+import { useAuthStore } from '@/stores/auth.store';
 
 const breadcrumbs = [
   {
@@ -10,12 +11,15 @@ const breadcrumbs = [
   },
 ];
 
-
 const menus = ref<IMenu[]>([]);
 
+const authStore = useAuthStore();
+
 onMounted(() => {
-  menus.value.push({ name: 'Master', path: '/master', icon: 'i-fa7-solid:address-card' });
-  menus.value.push({ name: 'Administrator', path: '/administrator', icon: 'i-fa7-solid:folder-gear' });
+  if (authStore.authUser?.role?.name === 'admin') {
+    menus.value.push({ name: 'Master', path: '/master', icon: 'i-fa7-solid:address-card' });
+    // menus.value.push({ name: 'Administrator', path: '/administrator', icon: 'i-fa7-solid:folder-gear' });
+  }
 });
 </script>
 

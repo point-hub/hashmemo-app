@@ -12,6 +12,8 @@ import CardActions from '../components/card-actions.vue';
 import CardBreadcrumbs from './card-breadcrumbs.vue';
 import CardEmail from './card-email.vue';
 import CardForm from './card-form.vue';
+import CardInternalNotes from './card-internal-notes.vue';
+import CardPhoto from './card-photo.vue';
 import CardRole from './card-role.vue';
 import { useForm } from './form';
 
@@ -19,6 +21,8 @@ const form = useForm();
 const route = useRoute();
 
 const isLoading = ref(false);
+const isEmailVerified = ref(false);
+const photoCode = ref();
 
 onMounted(async () => {
   try {
@@ -30,8 +34,16 @@ onMounted(async () => {
     form.data.email = response.email;
     form.data.notes = response.notes;
     form.data.role = response.role;
-    form.data.is_archived = response.is_archived;
+    form.data.nik = response.nik;
+    form.data.birthdate = response.birthdate;
+    form.data.initial_name = response.initial_name;
+    form.data.photo_id_url = response.photo_id_url;
+    form.data.photo_url = response.photo_url;
+
+    photoCode.value = response.photo_code;
+    isEmailVerified.value = response.email_verification?.is_verified ?? false;
   } catch (error) {
+    console.log(error);
     const errorResponse = handleError(error);
     if (errorResponse.message) {
       toast(errorResponse.message, {
@@ -59,6 +71,13 @@ const onRestored = async () => {
 
     <card-actions v-model:data="form.data" @restored="onRestored" @archived="onArchived" />
 
+    <status-banner v-if="!isEmailVerified" status-type="danger">
+      Email address has not been verified yet.
+    </status-banner>
+    <status-banner v-if="isEmailVerified && photoCode" status-type="danger">
+      Photo is not verified yet.
+    </status-banner>
+
     <status-banner v-if="form.data.is_archived" status-type="danger" message="This data has been archived." />
 
     <base-card v-if="!form.data._id">
@@ -68,6 +87,8 @@ const onRestored = async () => {
       <card-form v-model:data="form.data" />
       <card-email v-model:data="form.data" />
       <card-role v-model:data="form.data" />
+      <card-photo v-model:data="form.data" />
+      <card-internal-notes v-model:data="form.data" />
     </template>
   </app-container>
 </template>

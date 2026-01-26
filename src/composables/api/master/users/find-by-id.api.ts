@@ -5,11 +5,24 @@ export interface IResponse {
   username: string
   name: string
   email: string
+  initial_name: string
+  nik: string
+  birthdate: string
+  photo_code: string
+  photo_url: string
+  photo_id_url: string
   role: {
     _id: string
     code: string
     name: string
     permissions: string[]
+  }
+  email_verification: {
+    code?: string | null
+    url?: string | null
+    requested_at?: Date | null
+    is_verified?: boolean
+    verified_at?: Date | null
   }
   notes: string
   is_archived: boolean

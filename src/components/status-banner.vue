@@ -4,7 +4,7 @@ import { computed } from 'vue';
 type StatusType = 'info' | 'warning' | 'danger';
 
 const props = defineProps<{
-  message: string;
+  message?: string;
   statusType?: StatusType;
 }>();
 
@@ -46,7 +46,9 @@ const config = computed(() => {
         ]"
       />
       <p :class="['uppercase font-bold', config.textColor]">
-        {{ message }}
+        <slot>
+          {{ message }}
+        </slot>
       </p>
     </div>
   </base-card>
