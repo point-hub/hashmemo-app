@@ -28,6 +28,7 @@ onMounted(async () => {
     form.data.nik = response.nik;
     form.data.birthdate = response.birthdate;
     form.data.initial_name = response.initial_name;
+    form.data.photo_id_url = response.photo_id_url;
 
     selectedRole.value = {
       label: `[${response.role.code}] ${response.role.name}`,
@@ -58,6 +59,7 @@ const onSave = async () => {
       form.errors.initial_name = errorResponse.errors.initial_name || [];
       form.errors.birthdate = errorResponse.errors.birthdate || [];
       form.errors.nik = errorResponse.errors.nik || [];
+      form.errors.photo_id_url = errorResponse.errors.photo_id_url || [];
     }
     if (errorResponse.message) {
       toast(errorResponse.message, {

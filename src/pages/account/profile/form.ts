@@ -5,6 +5,7 @@ export interface IForm {
   initial_name: string
   nik: string
   birthdate: string
+  photo_id_url: string
 }
 
 export interface IFormError {
@@ -12,6 +13,7 @@ export interface IFormError {
   initial_name: string[]
   nik: string[]
   birthdate: string[]
+  photo_id_url: string[]
 }
 
 export function useForm() {
@@ -20,6 +22,7 @@ export function useForm() {
     initial_name: '',
     nik: '',
     birthdate: '',
+    photo_id_url: '',
   };
 
   const defaultFormError: IFormError = {
@@ -27,6 +30,7 @@ export function useForm() {
     initial_name: [],
     nik: [],
     birthdate: [],
+    photo_id_url: [],
   };
 
   const data = reactive<IForm>(defaultForm);
