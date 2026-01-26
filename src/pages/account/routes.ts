@@ -16,11 +16,11 @@ export default {
       component: () => import('./email/index.vue'),
       meta: { requiresAuth: true },
     },
-    {
-      path: 'username',
-      component: () => import('./username/index.vue'),
-      meta: { requiresAuth: true },
-    },
+    // {
+    //   path: 'username',
+    //   component: () => import('./username/index.vue'),
+    //   meta: { requiresAuth: true },
+    // },
     {
       path: 'password',
       component: () => import('./password/index.vue'),
