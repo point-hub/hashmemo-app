@@ -420,7 +420,7 @@ const archivedOptions = ref([{ label: 'Yes', value: 'true' }, { label: 'No', val
               <td v-if="columns['optional_unique']?.isVisible">{{ example.optional_unique }}</td>
               <td v-if="columns['notes']?.isVisible">{{ example.notes }}</td>
               <td v-if="columns['is_archived']?.isVisible">
-                <base-badge v-if="role.is_archived" variant="filled" color="danger" class="font-bold">
+                <base-badge v-if="example.is_archived" variant="filled" color="danger" class="font-bold">
                   <base-icon icon="i-fa7-solid:box-archive" /> ARCHIVED
                 </base-badge>
                 <base-badge v-else variant="filled" color="success" class="font-bold">
