@@ -10,10 +10,6 @@ export default {
       component: () => import('@/pages/auth/signin/index.vue'),
     },
     {
-      path: 'signup',
-      component: () => import('@/pages/auth/signup/index.vue'),
-    },
-    {
       path: 'verify-email',
       component: () => import('@/pages/auth/verify-email/index.vue'),
     },
