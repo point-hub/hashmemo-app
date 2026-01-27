@@ -103,8 +103,8 @@ defineExpose({
             type="password"
             layout="v"
             label="Password"
-            v-model="form.data.password"
             required
+            v-model="form.data.password"
             :errors="form.errors.password"
             :helpers="['Please enter your password to make sure this isn’t done by accident.']"
             border="full"
@@ -114,6 +114,7 @@ defineExpose({
             :autofocus="!requirePassword"
             layout="v"
             label="Reason"
+            required
             v-model="form.data.reason"
             :errors="form.errors.reason"
             :min-height="64" :helpers="['Leaving a reason helps you remember why you did this action.']"
