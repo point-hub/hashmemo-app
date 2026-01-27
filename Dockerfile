@@ -1,10 +1,18 @@
 # ---------------------------------------------------------------------------
 # stage 1 - builder
 # ---------------------------------------------------------------------------
-FROM oven/bun:1 AS builder
+FROM node:24-slim AS builder
+
+# install requirements for Bun
+RUN apt-get update && apt-get install -y curl unzip && \
+    curl -fsSL https://bun.sh/install | bash
+
+# ensure Bun is in the PATH
+ENV PATH="/root/.bun/bin:${PATH}"
 
 # setup default user and working directory
-WORKDIR /home/bun/app
+USER node
+WORKDIR /home/node/app
 
 # environment variable
 ARG VITE_API_BASE_URL
@@ -13,11 +21,11 @@ ARG VITE_API_TIMEOUT
 ENV VITE_API_TIMEOUT=$VITE_API_TIMEOUT
 
 # install dependencies
-COPY package.json bun.lock ./
+COPY --chown=node:node package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 # copy source code
-COPY . .
+COPY --chown=node:node . .
 
 # build app
 RUN bun run build
@@ -25,10 +33,10 @@ RUN bun run build
 # ---------------------------------------------------------------------------
 # stage 2 - runner
 # ---------------------------------------------------------------------------
-FROM nginx:1.29-alpine AS runner
+FROM nginx:1.29.1-alpine AS runner
 
 # copy nginx configuration server block file
 COPY .nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # copy web files
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /home/node/app/dist /usr/share/nginx/html
