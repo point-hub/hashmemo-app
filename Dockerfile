@@ -3,12 +3,8 @@
 # ---------------------------------------------------------------------------
 FROM oven/bun:1-slim as builder
 
-# install bun
-RUN npm install -g bun
-
 # setup default user and working directory
-USER node
-WORKDIR /home/node/app
+WORKDIR /app
 
 # environment variable
 ARG VITE_API_BASE_URL
@@ -21,7 +17,7 @@ COPY --chown=node:node package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 # copy source code
-COPY --chown=node:node . .
+COPY . .
 
 # build app
 RUN bun run build
@@ -29,7 +25,7 @@ RUN bun run build
 # ---------------------------------------------------------------------------
 # stage 2 - runner
 # ---------------------------------------------------------------------------
-FROM nginx:1.29.1-alpine as runner
+FROM nginx:1.29-alpine as runner
 
 # copy nginx configuration server block file
 COPY .nginx/default.conf /etc/nginx/conf.d/default.conf
