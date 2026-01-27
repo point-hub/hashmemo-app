@@ -3,11 +3,11 @@ import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { resetPasswordApi } from '@/composables/api/master/auth/reset-password.api.ts';
+import { usePassword } from '@/composables/password.ts';
 import { toast } from '@/toast.ts';
 import { handleError } from '@/utils/api.ts';
 
 import { useForm } from './form.ts';
-import { usePassword } from './password.ts';
 
 const route = useRoute();
 const router = useRouter();

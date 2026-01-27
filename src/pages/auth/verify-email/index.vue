@@ -8,7 +8,6 @@ import { toast } from '@/toast';
 import { apiRequest, handleError } from '@/utils/api';
 
 import { useForm } from './form';
-import { usePassword } from './password';
 
 const route = useRoute();
 const router = useRouter();
@@ -143,6 +142,8 @@ watch(() => form.data.value.initial_name, () => {
 });
 
 import { watchDebounced } from '@vueuse/core';
+
+import { usePassword } from '@/composables/password';
 watchDebounced(() => (form.data.value.code), async () => {
   await getUsers();
 }, { debounce: 500, maxWait: 1000 });

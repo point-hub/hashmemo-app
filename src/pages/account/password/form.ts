@@ -1,6 +1,6 @@
 import { computed, reactive } from 'vue';
 
-import { usePasswordValidation } from './validation';
+import { usePasswordValidation } from '@/composables/password-validation';
 
 export interface IForm {
   current_password?: string
@@ -44,42 +44,30 @@ export function useForm() {
     return (
       data.new_password.length > 0 &&
         data.password_confirmation.length > 0 &&
-        errors.new_password.length === 0
+        data.new_password && data.password_confirmation &&
+        errors.new_password.length === 0 &&
+        errors.password_confirmation.length === 0
     );
   });
 
   const validateConfirmationPassword = () => {
     errors.password_confirmation = [];
+
     if (!data.password_confirmation || data.password_confirmation.length === 0) {
       return;
     }
-    if (data.new_password !== data.password_confirmation) {
-      errors.password_confirmation.push('Password do not match');
-    }
+
+    errors.password_confirmation = passwordValidation.confirmed(data.new_password ?? '', data.password_confirmation);
   };
 
   const validatePassword = () => {
-    const errorPassword = [];
     validateConfirmationPassword();
+
     if (!data.new_password || data.new_password.length === 0) {
       return;
     }
-    if (data.new_password.length < 8) {
-      errorPassword.push('Use at least 8 characters');
-    }
-    if (!passwordValidation.containsUppercase(data.new_password)) {
-      errorPassword.push('Contain at least one uppercase letter');
-    }
-    if (!passwordValidation.containsLowercase(data.new_password)) {
-      errorPassword.push('Contain at least one lowercase letter');
-    }
-    if (!passwordValidation.containsNumber(data.new_password)) {
-      errorPassword.push('Contain at least one numeric character');
-    }
-    if (!passwordValidation.containsSpecialChars(data.new_password)) {
-      errorPassword.push('Contain at least one special character');
-    }
-    errors.new_password = errorPassword;
+
+    errors.new_password = passwordValidation.validate(data.new_password);
   };
 
   return {

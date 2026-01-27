@@ -3,11 +3,11 @@ import { ref } from 'vue';
 
 import { isEmailExistsApi } from '@/composables/api/master/auth/is-email-exists.api';
 import { signupApi } from '@/composables/api/master/auth/signup.api';
+import { usePassword } from '@/composables/password';
 import { toast } from '@/toast';
 import { handleError } from '@/utils/api';
 
 import { useForm } from './form';
-import { usePassword } from './password';
 import signupSuccess from './signup-success.vue';
 
 const form = useForm();

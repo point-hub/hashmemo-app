@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { usePassword } from '@/composables/password';
+
 import { type IForm, type IFormError } from './form';
-import { usePassword } from './password';
 
 defineProps<{
   validateConfirmationPassword: () => void
