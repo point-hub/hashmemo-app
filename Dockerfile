@@ -1,10 +1,10 @@
 # ---------------------------------------------------------------------------
 # stage 1 - builder
 # ---------------------------------------------------------------------------
-FROM oven/bun:1-slim AS builder
+FROM oven/bun:1 AS builder
 
 # setup default user and working directory
-WORKDIR /app
+WORKDIR /home/bun/app
 
 # environment variable
 ARG VITE_API_BASE_URL
