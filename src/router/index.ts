@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import authConfig from '@/config/auth';
 import routesAccount from '@/pages/account/routes';
-import routesAdministrator from '@/pages/administrator/routes';
+// import routesAdministrator from '@/pages/administrator/routes';
 import routesAuth from '@/pages/auth/routes';
 import routesMaster from '@/pages/master/routes';
 import { useAuthStore } from '@/stores/auth.store';
@@ -28,7 +28,7 @@ const router = createRouter({
             },
             routesAccount,
             routesMaster,
-            routesAdministrator,
+            // routesAdministrator,
           ],
         },
         {

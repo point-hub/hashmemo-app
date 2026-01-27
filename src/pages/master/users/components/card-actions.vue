@@ -88,7 +88,7 @@ const onDeleted = async () => {
           <base-icon icon="i-fa7-solid:file-pen" /> EDIT
         </base-button>
       </router-link>
-      <router-link v-if="authStore.hasPermission('users:read')" :to="`/master/users/${route.params.id}/histories`">
+      <!-- <router-link v-if="authStore.hasPermission('users:read')" :to="`/master/users/${route.params.id}/histories`">
         <base-button variant="filled" color="primary" size="sm" class="font-bold">
           <base-icon icon="i-fa7-solid:rectangle-history-circle-user" /> HISTORIES
         </base-button>
@@ -97,7 +97,7 @@ const onDeleted = async () => {
         <base-button variant="filled" color="primary" size="sm" class="font-bold">
           <base-icon icon="i-fa7-solid:file-magnifying-glass" /> AUDITS
         </base-button>
-      </router-link>
+      </router-link> -->
       <base-button v-if="authStore.hasPermission('users:delete') && user?._id" @click="onDeleteModal" variant="filled" color="primary" size="sm" class="font-bold">
         <base-icon icon="i-fa7-solid:trash-xmark" /> DELETE
       </base-button>

@@ -21,20 +21,20 @@ export default {
       component: () => import('./edit/index.vue'),
       meta: { requiresAuth: true, role: 'admin' },
     },
-    {
-      path: ':id/histories',
-      component: () => import('./histories/index.vue'),
-      meta: { requiresAuth: true, role: 'admin' },
-    },
-    {
-      path: ':id/audits',
-      component: () => import('./audits/index.vue'),
-      meta: { requiresAuth: true, role: 'admin' },
-    },
-    {
-      path: ':id/field-histories/:field',
-      component: () => import('./field-histories/index.vue'),
-      meta: { requiresAuth: true, role: 'admin' },
-    },
+    // {
+    //   path: ':id/histories',
+    //   component: () => import('./histories/index.vue'),
+    //   meta: { requiresAuth: true, role: 'admin' },
+    // },
+    // {
+    //   path: ':id/audits',
+    //   component: () => import('./audits/index.vue'),
+    //   meta: { requiresAuth: true, role: 'admin' },
+    // },
+    // {
+    //   path: ':id/field-histories/:field',
+    //   component: () => import('./field-histories/index.vue'),
+    //   meta: { requiresAuth: true, role: 'admin' },
+    // },
   ],
 };
