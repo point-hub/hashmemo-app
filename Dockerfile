@@ -3,16 +3,15 @@
 # ---------------------------------------------------------------------------
 FROM node:24-slim AS builder
 
-# install requirements for Bun
-RUN apt-get update && apt-get install -y curl unzip && \
-    curl -fsSL https://bun.sh/install | bash
-
-# ensure Bun is in the PATH
-ENV PATH="/root/.bun/bin:${PATH}"
-
 # setup default user and working directory
 USER node
 WORKDIR /home/node/app
+
+# install requirements for Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# ensure Bun is in the PATH
+ENV PATH="/home/node/.bun/bin:${PATH}"
 
 # environment variable
 ARG VITE_API_BASE_URL
