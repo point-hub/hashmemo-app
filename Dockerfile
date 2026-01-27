@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # stage 1 - builder
 # ---------------------------------------------------------------------------
-FROM node:22-slim as builder
+FROM oven/bun:1-slim as builder
 
 # install bun
 RUN npm install -g bun
