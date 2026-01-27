@@ -3,6 +3,11 @@
 # ---------------------------------------------------------------------------
 FROM node:24-slim AS builder
 
+# install curl (required for bun install)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
 # setup default user and working directory
 USER node
 WORKDIR /home/node/app
