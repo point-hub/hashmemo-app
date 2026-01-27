@@ -72,11 +72,11 @@ const onSave = async () => {
   }
 };
 
+
+const passwordConfirmationModalRef = ref();
 const onSubmit = () => {
   passwordConfirmationModalRef.value.toggleModal();
 };
-
-const passwordConfirmationModalRef = ref();
 const onPasswordConfirmed = async () => {
   await onSave();
 };

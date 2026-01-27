@@ -62,7 +62,7 @@ const {
     'role.code': '',
     'role.name': '',
     notes: '',
-    is_archived: '',
+    is_archived: 'false',
   },
   initialSortKeys: {
     username: 0,
