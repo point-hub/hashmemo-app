@@ -42,7 +42,7 @@ const onSubmit = async () => {
       return toast('Please use a strong password', { color: 'danger' });
     }
 
-    if (!form.isPasswordConfirmed) {
+    if (!form.isPasswordConfirmed.value) {
       return toast('Password confirmation does not match', { color: 'danger' });
     }
 
