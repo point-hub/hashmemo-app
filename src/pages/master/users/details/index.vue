@@ -70,7 +70,7 @@ const onRestored = async () => {
     <card-actions v-model:data="form.data" @restored="onRestored" @archived="onArchived" />
 
     <status-banner v-if="!isEmailVerified" status-type="danger">
-      Email address has not been verified yet.
+      The user needs to complete the verification process to access Hash Memo features.
     </status-banner>
     <status-banner v-if="isEmailVerified && photoCode" status-type="danger">
       Photo is not verified yet.
