@@ -95,7 +95,7 @@ watch(() => data.value.initial_name, () => {
       <base-input required v-model="data.name" label="Name" :errors="errors.name" :disabled="isSaving" />
       <base-input required v-model="data.nik" label="NIK" :errors="errors.nik" :disabled="isSaving" />
       <base-datepicker required v-model="data.birthdate" label="Birthdate" :errors="errors.birthdate" :disabled="isSaving" />
-      <base-input required v-model="data.initial_name" label="Initial Name" :errors="errors.initial_name" :disabled="isSaving" :helpers="['to be displayed in document as your signature']" maxlength="3" />
+      <base-input required v-model="data.initial_name" label="Initial Name" :errors="errors.initial_name" disabled :helpers="['to be displayed in document as your signature']" maxlength="3" />
       <base-file-upload required v-model="data.photo_id_url" :errors="errors.photo_id_url" label="Upload ID/Passport" layout="h" accept="image/*" @change="onFileSelect">
         <template v-slot="{ fileRef }">
           <div class="flex flex-col w-full gap-2">
