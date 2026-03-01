@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker?url';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import type { PageViewport, PDFPageProxy } from 'pdfjs-dist/types/web/interfaces';
 import { markRaw, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
@@ -9,7 +9,7 @@ import { markRaw, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue
 import dancingScriptUrl from '@/assets/fonts/DancingScript.ttf?url';
 import type { IPdfFile, ISignature, ISignatureState, IUser } from '@/types/pdf-signer';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 const DEFAULT_SIGNATURE_SIZE = { width: 70, height: 45 };
 const DEFAULT_INITIAL_SCALE = 0.8;
