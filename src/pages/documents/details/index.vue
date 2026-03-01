@@ -85,7 +85,7 @@ const exporting = (pdfResult: IPdfFile) => {
   // Trigger download
   const a = document.createElement('a');
   a.href = url;
-  a.download = "[SIGNED] " + form.data.name;
+  a.download = form.data.name!;
   document.body.appendChild(a);
   a.click();
 

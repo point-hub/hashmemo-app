@@ -147,6 +147,7 @@ const statusOptions = ref([
   { value: 'awaiting-signature', label: 'awaiting-signature' },
   { value: 'signed', label: 'signed' },
   { value: 'voided', label: 'voided' },
+  { value: 'rejected', label: 'rejected' },
 ]);
 const { options: folderOptions } = useSelectableFolders();
 
