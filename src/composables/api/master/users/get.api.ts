@@ -6,6 +6,7 @@ export interface IUserData {
   username: string
   name: string
   email: string
+  initial_name: string
   notes: string
   role: {
     _id: string

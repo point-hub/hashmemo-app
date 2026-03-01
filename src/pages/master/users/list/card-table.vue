@@ -33,7 +33,6 @@ const {
     username: { label: 'Username', isVisible: true, isSelectable: false },
     name: { label: 'Name', isVisible: true, isSelectable: false },
     email: { label: 'Email', isVisible: true, isSelectable: false },
-    'role.code': { label: 'Role (Code)', isVisible: true, isSelectable: true },
     'role.name': { label: 'Role (Name)', isVisible: true, isSelectable: true },
     notes: { label: 'Notes', isVisible: false, isSelectable: true },
     is_archived: { label: 'Is Archived', isVisible: false, isSelectable: true },
@@ -59,7 +58,6 @@ const {
     username: '',
     name: '',
     email: '',
-    'role.code': '',
     'role.name': '',
     notes: '',
     is_archived: 'false',
@@ -68,7 +66,6 @@ const {
     username: 0,
     name: 0,
     email: 0,
-    'role.code': 0,
     'role.name': 0,
     notes: 0,
     is_archived: 0,
@@ -320,9 +317,6 @@ const archivedOptions = ref([{ label: 'Yes', value: 'true' }, { label: 'No', val
             <th v-if="columns['email']?.isVisible">
               <base-input v-model="filter.email" placeholder="Search..." :readonly="isLoading" border="none" paddingless />
             </th>
-            <th v-if="columns['role.code']?.isVisible">
-              <base-input v-model="filter['role.code']" placeholder="Search..." :readonly="isLoading" border="none" paddingless />
-            </th>
             <th v-if="columns['role.name']?.isVisible">
               <base-input v-model="filter['role.name']" placeholder="Search..." :readonly="isLoading" border="none" paddingless />
             </th>
@@ -330,7 +324,7 @@ const archivedOptions = ref([{ label: 'Yes', value: 'true' }, { label: 'No', val
               <base-input v-model="filter.notes" placeholder="Search..." :readonly="isLoading" border="none" paddingless />
             </th>
             <th v-if="columns['is_archived']?.isVisible">
-              <base-choosen placeholder="Search..." title="Is Archived" v-model:options="archivedOptions" v-model:selectedValue="filter.is_archived" border="none" paddingless />
+              <base-choosen placeholder="Search..." title="Is Archived" v-model:options="archivedOptions" v-model="filter.is_archived" border="none" paddingless />
             </th>
           </tr>
         </thead>
@@ -403,15 +397,8 @@ const archivedOptions = ref([{ label: 'Yes', value: 'true' }, { label: 'No', val
               <td v-if="columns['email']?.isVisible">
                 <router-link :to="`/master/users/${user._id}`" class="text-blue-600">{{ user.email }}</router-link>
               </td>
-              <td v-if="columns['role.code']?.isVisible">
-                <router-link :to="`/master/roles/${user.role?._id}`" class="text-blue-600">
-                  {{ user.role.code }}
-                </router-link>
-              </td>
               <td v-if="columns['role.name']?.isVisible">
-                <router-link :to="`/master/roles/${user.role?._id}`" class="text-blue-600">
-                  {{ user.role.name }}
-                </router-link>
+                {{ user.role.name }}
               </td>
               <td v-if="columns['notes']?.isVisible">{{ user.notes }}</td>
               <td v-if="columns['is_archived']?.isVisible">

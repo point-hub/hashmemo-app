@@ -312,7 +312,7 @@ const archivedOptions = ref([{ label: 'Yes', value: 'true' }, { label: 'No', val
               <base-input v-model="filter.notes" placeholder="Search..." :readonly="isLoading" border="none" paddingless />
             </th>
             <th v-if="columns['is_archived']?.isVisible">
-              <base-choosen placeholder="Search..." title="Is Archived" v-model:options="archivedOptions" v-model:selectedValue="filter.is_archived" border="none" paddingless />
+              <base-choosen placeholder="Search..." title="Is Archived" v-model:options="archivedOptions" v-model="filter.is_archived" border="none" paddingless />
             </th>
           </tr>
         </thead>

@@ -41,20 +41,6 @@ const appMenu = ref<IAppMenu[]>([
         name: 'Home',
         path: '/home',
       },
-      // {
-      //   name: 'Master',
-      //   submenu: [
-      //     { name: 'Users', path: '/master/users' },
-      //     // { name: 'Roles', path: '/master/roles' },
-      //     // { name: 'Examples', path: '/master/examples' },
-      //   ],
-      // },
-      // {
-      //   name: 'Administrator',
-      //   submenu: [
-      //     { name: 'Audit Logs', path: '/administrator/audit-logs' },
-      //   ],
-      // },
     ],
   },
 ]);
@@ -95,6 +81,16 @@ onMounted(() => {
       ],
     });
   }
+
+  appMenu.value[0]?.menu?.push({
+    name: 'Documents',
+    path: '/documents'
+  });
+  
+  appMenu.value[0]?.menu?.push({
+    name: 'Verification Document',
+    path: '/verification'
+  });
 });
 </script>
 

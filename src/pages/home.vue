@@ -18,6 +18,8 @@ const authStore = useAuthStore();
 onMounted(() => {
   if (authStore.authUser?.role?.name === 'admin') {
     menus.value.push({ name: 'Master', path: '/master', icon: 'i-fa7-solid:address-card' });
+    menus.value.push({ name: 'Documents', path: '/documents', icon: 'i-fa7-solid:files' });
+    menus.value.push({ name: 'Verify Document', path: '/verification', icon: 'i-fa7-solid:file-check' });
     // menus.value.push({ name: 'Administrator', path: '/administrator', icon: 'i-fa7-solid:folder-gear' });
   }
 });

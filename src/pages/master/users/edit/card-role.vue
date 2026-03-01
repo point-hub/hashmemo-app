@@ -48,7 +48,7 @@ watch(
         :key="options.length"
         label="Role"
         required
-        v-model:selectedValue="data.role_id"
+        v-model="data.role_id"
         :options="options"
         :errors="errors.role_id"
         :disabled="isSaving"

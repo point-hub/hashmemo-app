@@ -40,7 +40,7 @@ onMounted(async () => {
     <div class="flex flex-col gap-2">
       <base-select label="Role"
         required
-        v-model:selectedValue="data.role_id"
+        v-model="data.role_id"
         :options="options"
         :errors="errors.role_id"
         :disabled="isSaving"

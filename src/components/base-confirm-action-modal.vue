@@ -46,6 +46,12 @@ const onSubmit = async () => {
     form.errors.password = ['Password is required.'];
     return;
   }
+  
+  // optional to require password
+  if (props.requireReason && form.data.reason === '') {
+    form.errors.reason = ['Reason is required.'];
+    return;
+  }
 
   try {
     // start loading state
