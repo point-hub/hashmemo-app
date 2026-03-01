@@ -8,6 +8,7 @@ import VoidDocumentModal from '../components/void-document-modal.vue';
 import SignDocumentModal from '../components/sign-document-modal.vue';
 import RejectDocumentModal from '../components/reject-document-modal.vue';
 import MoveDocumentModal from '../components/move-document-modal.vue';
+import StatusDocumentModal from '../components/status-document-modal.vue';
 import { getFoldersApi } from '@/composables/api/folders/get.api';
 import { getDocumentsApi, type IDocumentData } from '@/composables/api/documents/get.api';
 import { formatDate } from '@/utils/date';
@@ -115,6 +116,11 @@ const signedDocument = async () => {
   await loadDocuments()
 }
 
+const statusDocumentModalRef = ref()
+const statusDocument = (status: string, reason: string, created_at: string, created_by: string) => {
+  statusDocumentModalRef.value.toggleModal({ status, reason, created_at, created_by });
+}
+
 const rejectDocumentModalRef = ref()
 const rejectDocument = (_id: string) => {
   rejectDocumentModalRef.value.toggleModal({ _id });
@@ -192,6 +198,7 @@ const isShowSignAction = (document: IDocumentData) => {
   <move-document-modal ref="moveDocumentModalRef" @updated="movedDocument" />
   <sign-document-modal ref="signDocumentModalRef" @signed="signedDocument" />
   <reject-document-modal ref="rejectDocumentModalRef" @rejected="rejectedDocument" />
+  <status-document-modal ref="statusDocumentModalRef" />
   <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-4">
       <div class="flex gap-4 justify-between">
@@ -279,8 +286,19 @@ const isShowSignAction = (document: IDocumentData) => {
                   <router-link :to="`/documents/${document._id}`" class="text-blue-600">{{ document.name }}</router-link>
                 </td>
                 <td>{{ document.created_by.username }}</td>
+                <!-- <td><pre><code>{{ document}}</code></pre></td> -->
                 <td>{{ formatDate(document.created_at) }}</td>
-                <td>{{ document.status }}</td>
+                <td>
+                  <div v-if="document.status === 'rejected'" @click="statusDocument('Rejected', document.rejected_reason, document.rejected_at, document.rejected_by?.username)" class="cursor-pointer text-blue-600">
+                    {{ document.status }}
+                  </div>
+                  <div v-else-if="document.status === 'voided'" @click="statusDocument('Voided', document.voided_reason, document.voided_at, document.voided_by?.username)" class="cursor-pointer text-blue-600">
+                    {{ document.status }}
+                  </div>
+                  <div v-else>
+                    {{ document.status }}
+                  </div>
+                </td>
                 <td><base-icon icon="i-fa7-regular:clock" /></td>
                 <td>
                   <base-button

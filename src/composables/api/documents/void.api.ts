@@ -6,7 +6,7 @@ interface IResponse {
 }
 
 export const voidDocumentApi = async (id: string, data: unknown): Promise<IResponse> => {
-  const response = await apiRequest.post(`/v1/files/${id}/void`, data);
+  const response = await apiRequest.post(`/v1/files/${id}/void`, {reason: data});
 
   return response.data;
 };

@@ -6,7 +6,7 @@ interface IResponse {
 }
 
 export const rejectDocumentApi = async (id: string, data: unknown): Promise<IResponse> => {
-  const response = await apiRequest.post(`/v1/files/${id}/reject`, data);
+  const response = await apiRequest.post(`/v1/files/${id}/reject`, { reason: data});
 
   return response.data;
 };
