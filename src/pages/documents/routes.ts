@@ -22,11 +22,6 @@ export default {
       meta: { requiresAuth: true, permission: 'documents:read' },
     },
     {
-      path: ':id/edit',
-      component: () => import('./edit/index.vue'),
-      meta: { requiresAuth: true, permission: 'documents:update' },
-    },
-    {
       path: ':id/histories',
       component: () => import('./histories/index.vue'),
       meta: { requiresAuth: true, permission: 'documents:read' },

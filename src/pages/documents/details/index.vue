@@ -7,7 +7,6 @@ import { findDocumentApi } from '@/composables/api/documents/find-by-id.api';
 import { toast } from '@/toast';
 import { handleError } from '@/utils/api';
 
-import CardActions from '../components/card-actions.vue';
 import CardBreadcrumbs from './card-breadcrumbs.vue';
 import { useForm, type IForm } from './form';
 import type { IPdfFile, ISignature, ISignatureState, IUser } from '@/types/pdf-signer';

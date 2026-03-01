@@ -25,7 +25,7 @@ const document = defineModel<IForm>('data');
 const onArchiveModal = () => {
   archiveModalRef.value.toggleModal({
     _id: document.value?._id,
-    label: `[${document.value?.code}] ${document.value?.name}`,
+    label: `${document.value?.name}`,
   });
 };
 
@@ -42,7 +42,7 @@ const onArchived = async () => {
 const onRestoreModal = () => {
   restoreModalRef.value.toggleModal({
     _id: document.value?._id,
-    label: `[${document.value?.code}] ${document.value?.name}`,
+    label: `${document.value?.name}`,
   });
 };
 
@@ -59,7 +59,7 @@ const onRestored = async () => {
 const onDeleteModal = () => {
   deleteModalRef.value.toggleModal({
     _id: document.value?._id,
-    label: `[${document.value?.code}] ${document.value?.name}`,
+    label: `${document.value?.name}`,
   });
 };
 
@@ -100,12 +100,6 @@ const onDeleted = async () => {
       </router-link>
       <base-button v-if="authStore.hasPermission('documents:delete') && document?._id" @click="onDeleteModal" variant="filled" color="primary" size="sm" class="font-bold">
         <base-icon icon="i-fa7-solid:trash-xmark" /> DELETE
-      </base-button>
-      <base-button v-if="authStore.hasPermission('documents:update') && document?._id && !document.is_archived" @click="onArchiveModal" variant="filled" color="primary" size="sm" class="font-bold">
-        <base-icon icon="i-fa7-solid:box-archive" /> ARCHIVE
-      </base-button>
-      <base-button v-if="authStore.hasPermission('documents:update') && document?._id && document.is_archived" @click="onRestoreModal" variant="filled" color="primary" size="sm" class="font-bold">
-        <base-icon icon="i-fa7-solid:box-arrow-up" /> RESTORE
       </base-button>
     </div>
   </base-card>

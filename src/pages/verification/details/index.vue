@@ -7,18 +7,16 @@ import { findDocumentApi } from '@/composables/api/documents/find-by-id.api';
 import { toast } from '@/toast';
 import { handleError } from '@/utils/api';
 
-import CardActions from '../components/card-actions.vue';
-import CardBreadcrumbs from './card-breadcrumbs.vue';
 import { useForm, type IForm } from './form';
 import type { IPdfFile, ISignature, ISignatureState, IUser } from '@/types/pdf-signer';
-import PdfSignerViewer from '../components/pdf-signer-viewer.vue';
+
 import { getStoragesApi } from '@/composables/api/storages/get.api';
+import PdfSignerViewer from '@/pages/documents/components/pdf-signer-viewer.vue';
 
 const route = useRoute();
 const form = useForm();
 
 const isLoading = ref(false);
-
 onMounted(async () => {
   try {
     isLoading.value = true;

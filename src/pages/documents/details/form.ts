@@ -39,6 +39,7 @@ export function useForm() {
   };
 
   const defaultFormError: IFormError = {
+    _id: [],
     folder_id: [],
     pdf_url: [],
     name: [],
