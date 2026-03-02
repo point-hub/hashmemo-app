@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 import AppContainer from '@/components/app-container.vue';
 import { toast } from '@/toast';
@@ -12,17 +12,41 @@ import { useAuthStore } from '@/stores/auth.store';
 
 const form = useForm();
 
+const pagination = ref({
+  page: 1,
+  page_count: 0,
+  page_size: 1,
+  total_document: 0,
+});
+
+const onPageUpdate = async () => {
+  const response = (await getActivitiesApi({
+    search: {
+      user_id: authStore.authUser?._id
+    },
+    page: pagination.value.page,
+    sort: '-_id'
+  }));
+
+  activities.value = response.data
+  pagination.value = response.pagination
+};
+
 const isLoading = ref(false);
 const activities = ref()
 const authStore = useAuthStore()
 onMounted(async () => {
   try {
     isLoading.value = true;
-    activities.value = (await getActivitiesApi({
+    const response = await getActivitiesApi({
       search: {
         user_id: authStore.authUser?._id
-      }
-    })).data;
+      },
+      page: pagination.value.page,
+      sort: '-_id'
+    });
+    activities.value = response.data
+    pagination.value = response.pagination
   } catch (error) {
     const errorResponse = handleError(error);
     if (errorResponse.message) {
@@ -62,6 +86,14 @@ onMounted(async () => {
             </tr>
           </tbody>
         </base-table>
+        <br>
+        <base-pagination
+          v-if="!isLoading"
+          v-model="pagination.page"
+          :page-size="pagination.page_size"
+          :total-document="pagination.total_document"
+          @update:model-value="onPageUpdate()"
+        />
       </base-card>
     </template>
   </app-container>
