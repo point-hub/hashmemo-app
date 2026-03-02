@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { watchDebounced } from '@vueuse/core';
 
 import AppContainer from '@/components/app-container.vue';
 import { findDocumentApi } from '@/composables/api/documents/find-by-id.api';
@@ -19,6 +20,34 @@ const form = useForm();
 
 const isLoading = ref(false);
 const activities = ref()
+const search = ref()
+
+const pagination = ref({
+  page: 1,
+  page_count: 0,
+  page_size: 1,
+  total_document: 0,
+});
+
+watchDebounced(
+  () => search.value,
+  async (val) => {
+    const response = (await getActivitiesApi({
+      search: {
+        all: search.value,
+        file_id: route.params.id
+      },
+      page: pagination.value.page,
+      sort: '-_id'
+    }));
+
+    activities.value = response.data
+    pagination.value = response.pagination
+  },
+  { debounce: 500, maxWait: 1000 },
+);
+
+
 onMounted(async () => {
   try {
     isLoading.value = true;
@@ -74,6 +103,20 @@ const state = ref<ISignatureState>({
   currentUser: users[0]!,
   pageSize: { width: 0, height: 0 },
 });
+
+const onPageUpdate = async () => {
+  const response = (await getActivitiesApi({
+    search: {
+      all: search.value,
+      file_id: route.params.id
+    },
+    page: pagination.value.page,
+    sort: '-_id'
+  }));
+
+  activities.value = response.data
+  pagination.value = response.pagination
+};
 
 // Handle user drag from panel
 const handleUserDragStart = (user: IUser) => {
@@ -153,6 +196,7 @@ const handleUploadFromUrl = async (url: string) => {
       Data Not Found
     </base-card>
     <template v-else>
+      
       <base-card title="Document Information">
         <base-table>
           <tbody>
@@ -167,6 +211,9 @@ const handleUploadFromUrl = async (url: string) => {
           </tbody>
         </base-table>
       </base-card>
+      <br />
+
+      <base-input v-model="search" placeholder="Search..." />
       <base-card title="History">
         <base-table>
           <thead>
@@ -184,6 +231,14 @@ const handleUploadFromUrl = async (url: string) => {
             </tr>
           </tbody>
         </base-table>
+        <br>
+        <base-pagination
+          v-if="!isLoading"
+          v-model="pagination.page"
+          :page-size="pagination.page_size"
+          :total-document="pagination.total_document"
+          @update:model-value="onPageUpdate()"
+        />
       </base-card>
     </template>
   </app-container>

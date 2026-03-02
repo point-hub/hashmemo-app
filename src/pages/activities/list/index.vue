@@ -20,22 +20,22 @@ const pagination = ref({
 });
 
 watchDebounced(
-    () => search.value,
-    async (val) => {
-      const response = (await getActivitiesApi({
-        search: {
-          all: search.value,
-          user_id: authStore.authUser?._id
-        },
-        page: pagination.value.page,
-        sort: '-_id'
-      }));
+  () => search.value,
+  async (val) => {
+    const response = (await getActivitiesApi({
+      search: {
+        all: search.value,
+        user_id: authStore.authUser?._id
+      },
+      page: pagination.value.page,
+      sort: '-_id'
+    }));
 
-      activities.value = response.data
-      pagination.value = response.pagination
-    },
-    { debounce: 500, maxWait: 1000 },
-  );
+    activities.value = response.data
+    pagination.value = response.pagination
+  },
+  { debounce: 500, maxWait: 1000 },
+);
 
 
 const onPageUpdate = async () => {
