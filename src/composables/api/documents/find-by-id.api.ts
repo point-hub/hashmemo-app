@@ -1,5 +1,6 @@
 import { apiRequest } from '@/utils/api';
 import type { IApproval, ISignature } from './get.api';
+import type { IAuthUser } from '@/stores/auth.store';
 
 export interface IResponse {
   _id?: string
@@ -14,6 +15,7 @@ export interface IResponse {
   is_archived?: boolean | null | undefined
   created_at?: Date
   created_by_id?: string
+  created_by?: IAuthUser
   voided_at?: Date
   voided_by_id?: string
   voided_reason?: string

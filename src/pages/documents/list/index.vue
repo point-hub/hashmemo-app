@@ -306,7 +306,9 @@ const isShowSignAction = (document: IDocumentData) => {
                   </div>
                 </td>
                 <td>
-                  <base-icon icon="i-fa7-regular:clock" @click="historyDocument(document._id, document.created_by.name, document.name)" class="cursor-pointer" />
+                  <router-link :to="`/documents/${document._id}/audit`">
+                    <base-icon icon="i-fa7-regular:clock" class="cursor-pointer" />
+                  </router-link>
                 </td>
                 <td>
                   <base-button
