@@ -218,6 +218,7 @@ const addSignatureAt = (x: number, y: number) => {
     page: layout.page,
     user_id: props.draggingUser!.user_id,
     name: props.draggingUser!.name,
+    role: props.draggingUser!.role,
     initial_name: props.draggingUser!.initial_name,
     email: props.draggingUser!.email,
     signed: false,

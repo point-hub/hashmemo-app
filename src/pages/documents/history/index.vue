@@ -10,17 +10,24 @@ import { handleError } from '@/utils/api';
 import CardBreadcrumbs from './card-breadcrumbs.vue';
 import { useForm, type IForm } from './form';
 import type { IPdfFile, ISignature, ISignatureState, IUser } from '@/types/pdf-signer';
-import PdfSignerViewer from '../components/pdf-signer-viewer.vue';
+
 import { getStoragesApi } from '@/composables/api/storages/get.api';
+import { getActivitiesApi } from '@/composables/api/activities/get.api';
+import { formatDate } from '@/utils/date';
 
 const route = useRoute();
 const form = useForm();
 
 const isLoading = ref(false);
-
+const activities = ref()
 onMounted(async () => {
   try {
     isLoading.value = true;
+    activities.value = (await getActivitiesApi({
+      search: {
+        file_id: route.params.id
+      }
+    })).data;
     const response = await findDocumentApi(route.params.id as string);
     if (response) {
       form.data._id = response._id;
@@ -28,10 +35,11 @@ onMounted(async () => {
       form.data.hash = response.hash;
       form.data.certificate_id = response.certificate_id;
       form.data.pdf_url = response.pdf_url;
+      form.data.signatures = response.signatures as unknown as ISignature[];
 
       signaturesJson.value = JSON.stringify(response.signatures)
       state.value.signatures = JSON.stringify(response.signatures) as unknown as ISignature[]
-      console.log(response.pdf_url)
+      
       await handleUploadFromUrl(response.pdf_url!)
     }
   } catch (error) {
@@ -138,11 +146,9 @@ const handleUploadFromUrl = async (url: string) => {
   }
 };
 
-const pdfViewerRef = ref();
 const handleExport = async () => {
   window.print()
 };
-
 </script>
 
 <template>
@@ -178,48 +184,50 @@ const handleExport = async () => {
           <tbody>
             <tr>
               <td>Document Name</td>
-              <td></td>
+              <td>{{ form.data.name }}</td>
             </tr>
             <tr>
               <td>Certificate ID</td>
-              <td></td>
+              <td>{{ form.data.certificate_id }}</td>
             </tr>
             <tr>
               <td>Hash Code</td>
-              <td></td>
+              <td>{{ form.data.hash }}</td>
             </tr>
           </tbody>
         </base-table>
       </base-card>
       <base-card title="Signature Details">
-        <base-table>
-          <tbody>
-            <tr>
-              <td>User</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>Role</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>Date</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>IP Address</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </base-table>
+        <div class="flex flex-col gap-4">
+          <base-table v-for="signature in form.data.signatures" class="border border-slate-200">
+            <tbody>
+              <tr>
+                <td>User</td>
+                <td>{{ signature.name }}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{{ signature.email }}</td>
+              </tr>
+              <tr>
+                <td>Role</td>
+                <td>{{ signature.role }}</td>
+              </tr>
+              <tr>
+                <td>Date</td>
+                <td>{{ signature.signed_at ? formatDate(signature.signed_at) : '' }}</td>
+              </tr>
+              <tr>
+                <td>IP Address</td>
+                <td>{{ signature.ip }}</td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>{{ signature.signed ? 'Telah ditandatangani' : '' }}</td>
+              </tr>
+            </tbody>
+          </base-table>
+        </div>
       </base-card>
       <base-card title="Audit Trails">
         <base-table>
@@ -232,11 +240,11 @@ const handleExport = async () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+            <tr v-for="activity in activities">
+              <td>{{ formatDate(activity.created_at) }}</td>
+              <td>{{ activity.action }}</td>
+              <td>{{ activity.name }}</td>
+              <td>{{ activity.ip }}</td>
             </tr>
           </tbody>
         </base-table>

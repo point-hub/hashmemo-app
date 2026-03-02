@@ -16,9 +16,12 @@ export interface ISignature {
   user_id: string | null
   name: string
   email: string
+  role: string
   initial_name?: string
   hash?: string
   signed: boolean
+  signed_at?: string
+  ip?: string
 }
 
 export interface ISignatureState {
