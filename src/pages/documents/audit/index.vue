@@ -226,7 +226,7 @@ const handleUploadFromUrl = async (url: string) => {
           <tbody>
             <tr v-for="activity in activities">
               <td>{{ formatDate(activity.created_at) }}</td>
-              <td>{{ activity.action }}</td>
+              <td>{{ activity.action }} {{ activity.file_name }}</td>
               <td>{{ activity.name }}</td>
             </tr>
           </tbody>
