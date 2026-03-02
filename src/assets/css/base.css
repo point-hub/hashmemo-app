@@ -29,3 +29,9 @@ a.link {
   @apply flex flex-col gap-2;
 }
 
+@media print {
+  .content-container {
+    margin-top: -60px;
+    font-size: 12px;
+  }
+}

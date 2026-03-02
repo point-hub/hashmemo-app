@@ -97,7 +97,7 @@ onMounted(() => {
 <template>
   <div class="app-layout">
     <!-- Header -->
-    <app-header>
+    <app-header class="print:hidden!">
       <template #left-header>
         <header-sidebar-button
           :on-toggle-sidebar="sidebarStore.toggleSidebar"
@@ -120,14 +120,17 @@ onMounted(() => {
     </app-header>
 
     <!-- Sidebar -->
-    <app-sidebar
-      :title="sidebarMenuStore.choosenAppTitle"
-      :apps="sidebarMenuStore.appMenu"
-      :menus="sidebarMenuStore.appMenu[sidebarMenuStore.choosenAppIndex]?.menu ?? []"
-      :is-sidebar-open="sidebarStore.isSidebarOpen"
-      :is-mobile="mobileBreakpoint.isMobile()"
-      @choose="sidebarMenuStore.onChooseApp"
-    />
+    <div class="print:hidden!">
+      <app-sidebar
+        
+        :title="sidebarMenuStore.choosenAppTitle"
+        :apps="sidebarMenuStore.appMenu"
+        :menus="sidebarMenuStore.appMenu[sidebarMenuStore.choosenAppIndex]?.menu ?? []"
+        :is-sidebar-open="sidebarStore.isSidebarOpen"
+        :is-mobile="mobileBreakpoint.isMobile()"
+        @choose="sidebarMenuStore.onChooseApp"
+      />
+    </div>
 
     <!-- Main Container -->
     <div class="main-container">
@@ -137,7 +140,7 @@ onMounted(() => {
       </main>
 
       <!-- Footer -->
-      <app-footer :version="version" :year="2025" />
+      <app-footer :version="version" :year="2025" class="print:hidden!" />
     </div>
   </div>
 </template>
