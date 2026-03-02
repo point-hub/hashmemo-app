@@ -105,12 +105,13 @@ onMounted(() => {
         />
       </template>
       <template #right-header>
-        <app-header-notifications />
+        <!-- <app-header-notifications /> -->
         <base-divider class="h-10 print:hidden!" orientation="horizontal" />
         <header-menu v-model:is-open="isHeaderMenuOpen" :organization="account?.organization" :username="account?.username" :avatar="authStore.authUser?.photo_url" class="print:hidden!">
           <header-menu-account :organization="account?.organization" :username="account?.username" :avatar="authStore.authUser?.photo_url" />
           <base-divider orientation="vertical" class="my-2!" />
           <header-menu-link label="My Account" icon="i-ph:user-circle-gear-duotone" path="/account" @click="() => isHeaderMenuOpen = false" />
+          <header-menu-link label="My Activities" icon="i-ph:clock-duotone" path="/activities" @click="() => isHeaderMenuOpen = false" />
           <header-menu-switch-organization :organizations="organizations" />
           <header-menu-dark-mode :on-toggle-dark-mode="toggleDarkMode" v-model:is-dark-mode="isDarkMode" />
           <header-menu-signout :on-signout="onSignout" />
