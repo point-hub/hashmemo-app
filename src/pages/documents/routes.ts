@@ -22,6 +22,11 @@ export default {
       meta: { requiresAuth: true, permission: 'documents:read' },
     },
     {
+      path: ':id/history',
+      component: () => import('./history/index.vue'),
+      meta: { requiresAuth: true, permission: 'documents:read' },
+    },
+    {
       path: ':id/histories',
       component: () => import('./histories/index.vue'),
       meta: { requiresAuth: true, permission: 'documents:read' },

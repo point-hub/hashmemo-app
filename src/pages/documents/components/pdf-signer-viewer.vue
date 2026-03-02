@@ -219,6 +219,7 @@ const addSignatureAt = (x: number, y: number) => {
     user_id: props.draggingUser!.user_id,
     name: props.draggingUser!.name,
     initial_name: props.draggingUser!.initial_name,
+    email: props.draggingUser!.email,
     signed: false,
   };
 
@@ -516,6 +517,24 @@ defineExpose({ exportPdf });
       <!-- Canvas for rendering PDF -->
       <canvas ref="canvas" />
       <!-- Signatures -->
+      <p 
+        class="absolute font-bold"
+        :style="{
+          left: '5px',
+          top: '5px',
+        }"
+      >
+        Hash: {{ hash }}
+      </p>
+      <p 
+        class="absolute font-bold"
+        :style="{
+          left: '5px',
+          top: '25px',
+        }"
+      >
+        Certificate ID: {{ certId }}
+      </p>
       <div
         v-for="sig in state.signatures"
         :key="sig.id"

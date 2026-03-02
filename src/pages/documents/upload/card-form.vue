@@ -26,11 +26,13 @@ const addApproval = () => {
     role: '',
     initial_name: '',
     name: '',
+    email: '',
   })
 }
 
 const onSelectedApproval = (selected: IFormApproval, approval: IFormApproval) => {
   approval.name = selected.name;
+  approval.email = selected.email;
   approval.initial_name = selected.initial_name;
 };
 </script>

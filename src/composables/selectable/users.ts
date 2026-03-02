@@ -14,6 +14,7 @@ export function useSelectableUsers() {
     .map(user => ({
       label: user.name,
       name: user.name,
+      email: user.email,
       initial_name: user.initial_name,
       value: user._id,
     })),

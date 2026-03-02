@@ -6,6 +6,7 @@ export interface PdfSignerUser {
   user_id: string
   initial_name: string
   name: string
+  email: string
   role: string
 }
 

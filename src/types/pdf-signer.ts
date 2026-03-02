@@ -1,6 +1,7 @@
 export interface IUser {
   user_id: string
   name: string
+  email: string
   initial_name: string
   role: string
 }
@@ -14,6 +15,7 @@ export interface ISignature {
   height: number
   user_id: string | null
   name: string
+  email: string
   initial_name?: string
   hash?: string
   signed: boolean

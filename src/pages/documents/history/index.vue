@@ -140,34 +140,31 @@ const handleUploadFromUrl = async (url: string) => {
 
 const pdfViewerRef = ref();
 const handleExport = async () => {
-  await pdfViewerRef.value?.exportPdf();
+  window.print()
 };
-const handleExportWithCertificate = async () => {
-  await pdfViewerRef.value?.exportPdf(true);
-};
+
 </script>
 
 <template>
   <app-container :is-loading="isLoading">
-    <card-breadcrumbs />
+    <card-breadcrumbs class="print:hidden!" />
 
-    <base-card>
+    <base-card class="print:hidden!">
       <div class="flex gap-2 justify-between">
         <div class="flex gap-2">
           <router-link :to="`/documents/${route.params.id}`">
-            <base-button variant="filled" color="info">
+            <base-button variant="filled" color="primary">
               Preview
             </base-button>
           </router-link>
           <router-link :to="`/documents/${route.params.id}/history`">
-            <base-button variant="filled" color="primary">
+            <base-button variant="filled" color="info">
               History
             </base-button>
           </router-link>
         </div>
         <div class="flex gap-2">
           <base-button variant="filled" color="primary" @click="handleExport">Download</base-button>
-          <base-button variant="filled" color="primary" @click="handleExportWithCertificate">Download with Certificate</base-button>
         </div>
       </div>
     </base-card>
@@ -176,21 +173,74 @@ const handleExportWithCertificate = async () => {
       Data Not Found
     </base-card>
     <template v-else>
-      <pdf-signer-viewer
-        ref="pdfViewerRef"
-        class="shadow"
-        v-model="state"
-        v-model:signaturesJson="signaturesJson"
-        :hash="form.data.hash"
-        :certId="form.data.certificate_id"
-        :pdf-file="pdfFile"
-        :users="form.data.approvals"
-        :current-user="state.currentUser"
-        :dragging-user="draggingUser"
-        :preview="true"
-        @signature:signed="onSigned"
-        @pdf:export="exporting"
-      />
+      <base-card title="Document Information">
+        <base-table>
+          <tbody>
+            <tr>
+              <td>Document Name</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Certificate ID</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Hash Code</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </base-table>
+      </base-card>
+      <base-card title="Signature Details">
+        <base-table>
+          <tbody>
+            <tr>
+              <td>User</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Role</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Date</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>IP Address</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </base-table>
+      </base-card>
+      <base-card title="Audit Trails">
+        <base-table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Name</th>
+              <th>IP Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </base-table>
+      </base-card>
     </template>
   </app-container>
 </template>

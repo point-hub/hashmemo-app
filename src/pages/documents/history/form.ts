@@ -5,20 +5,23 @@ export interface IFormApproval {
   user_id: string
   initial_name: string
   name: string
-  email: string
   role: string
 }
 
 export interface IForm {
+  _id?: string
   folder_id?: string
   pdf_url?: string
   name?: string
+  hash?: string
+  certificate_id?: string
   approvals?: IFormApproval[]
   signatures?: ISignature[]
 }
 
 export interface IFormError {
   [key: string]: string[]
+  _id: string[]
   folder_id: string[]
   pdf_url: string[]
   name: string[]
@@ -36,6 +39,7 @@ export function useForm() {
   };
 
   const defaultFormError: IFormError = {
+    _id: [],
     folder_id: [],
     pdf_url: [],
     name: [],

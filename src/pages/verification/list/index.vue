@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { getDocumentsApi } from '@/composables/api/documents/get.api';
+import { useAuthStore } from '@/stores/auth.store';
 import { toast } from '@/toast';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const code = ref()
+
+const authStore = useAuthStore() 
 
 const onClick = async () => {
   const response = await getDocumentsApi({
@@ -20,6 +23,16 @@ const onClick = async () => {
     });
     return
   }
+
+  const isIncluded = response.data[0]?.approvals?.some(
+    (approval) => approval.user_id === authStore.authUser?._id
+  )
+
+  if (isIncluded) {
+    router.push('/documents/' + response.data[0]?._id)
+    return
+  }
+   
   router.push('/verification/' + response.data[0]?._id)
 }
 </script>
