@@ -167,8 +167,7 @@ const handleExportWithCertificate = async () => {
           </router-link>
         </div>
         <div class="flex gap-2">
-          <base-button variant="filled" color="primary" @click="handleExport">Download</base-button>
-          <base-button variant="filled" color="primary" @click="handleExportWithCertificate">Download with Certificate</base-button>
+          <base-button v-if="form.data.status === 'signed'" variant="filled" color="primary" @click="handleExportWithCertificate">Download</base-button>
         </div>
       </div>
     </base-card>
