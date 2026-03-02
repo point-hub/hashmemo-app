@@ -184,15 +184,15 @@ const handleExport = async () => {
           <tbody>
             <tr>
               <td class="whitespace-nowrap">Document Name</td>
-              <td>{{ form.data.name }}</td>
+              <td class="break-all">{{ form.data.name }}</td>
             </tr>
             <tr>
               <td class="whitespace-nowrap">Certificate ID</td>
-              <td>{{ form.data.certificate_id }}</td>
+              <td class="break-all">{{ form.data.certificate_id }}</td>
             </tr>
             <tr>
               <td class="whitespace-nowrap">Hash Code</td>
-              <td>{{ form.data.hash }}</td>
+              <td class="break-all">{{ form.data.hash }}</td>
             </tr>
           </tbody>
         </base-table>
