@@ -9,6 +9,7 @@ import SignDocumentModal from '../components/sign-document-modal.vue';
 import RejectDocumentModal from '../components/reject-document-modal.vue';
 import MoveDocumentModal from '../components/move-document-modal.vue';
 import StatusDocumentModal from '../components/status-document-modal.vue';
+import HistoryDocumentModal from '../components/history-document-modal.vue';
 import { getFoldersApi } from '@/composables/api/folders/get.api';
 import { getDocumentsApi, type IDocumentData } from '@/composables/api/documents/get.api';
 import { formatDate } from '@/utils/date';
@@ -121,6 +122,11 @@ const statusDocument = (status: string, reason: string, created_at: string, crea
   statusDocumentModalRef.value.toggleModal({ status, reason, created_at, created_by });
 }
 
+const historyDocumentModalRef = ref()
+const historyDocument = (file_id: string, created_by: string, name: string) => {
+  historyDocumentModalRef.value.toggleModal(file_id, created_by, name);
+}
+
 const rejectDocumentModalRef = ref()
 const rejectDocument = (_id: string) => {
   rejectDocumentModalRef.value.toggleModal({ _id });
@@ -199,6 +205,7 @@ const isShowSignAction = (document: IDocumentData) => {
   <sign-document-modal ref="signDocumentModalRef" @signed="signedDocument" />
   <reject-document-modal ref="rejectDocumentModalRef" @rejected="rejectedDocument" />
   <status-document-modal ref="statusDocumentModalRef" />
+  <history-document-modal ref="historyDocumentModalRef" />
   <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-4">
       <div class="flex gap-4 justify-between">
@@ -286,7 +293,6 @@ const isShowSignAction = (document: IDocumentData) => {
                   <router-link :to="`/documents/${document._id}`" class="text-blue-600">{{ document.name }}</router-link>
                 </td>
                 <td>{{ document.created_by.username }}</td>
-                <!-- <td><pre><code>{{ document}}</code></pre></td> -->
                 <td>{{ formatDate(document.created_at) }}</td>
                 <td>
                   <div v-if="document.status === 'rejected'" @click="statusDocument('Rejected', document.rejected_reason, document.rejected_at, document.rejected_by?.username)" class="cursor-pointer text-blue-600">
@@ -299,7 +305,9 @@ const isShowSignAction = (document: IDocumentData) => {
                     {{ document.status }}
                   </div>
                 </td>
-                <td><base-icon icon="i-fa7-regular:clock" /></td>
+                <td>
+                  <base-icon icon="i-fa7-regular:clock" @click="historyDocument(document._id, document.created_by.name, document.name)" class="cursor-pointer" />
+                </td>
                 <td>
                   <base-button
                     v-if="isShowSignAction(document)"
