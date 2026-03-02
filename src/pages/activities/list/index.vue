@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { watchDebounced } from '@vueuse/core';
 
 import AppContainer from '@/components/app-container.vue';
 import { toast } from '@/toast';
 import { handleError } from '@/utils/api';
 
-import { useForm } from './form';
 import { getActivitiesApi } from '@/composables/api/activities/get.api';
 import { formatDate } from '@/utils/date';
 import { useAuthStore } from '@/stores/auth.store';
 
-const form = useForm();
+const search = ref()
 
 const pagination = ref({
   page: 1,
@@ -19,9 +19,29 @@ const pagination = ref({
   total_document: 0,
 });
 
+watchDebounced(
+    () => search.value,
+    async (val) => {
+      const response = (await getActivitiesApi({
+        search: {
+          all: search.value,
+          user_id: authStore.authUser?._id
+        },
+        page: pagination.value.page,
+        sort: '-_id'
+      }));
+
+      activities.value = response.data
+      pagination.value = response.pagination
+    },
+    { debounce: 500, maxWait: 1000 },
+  );
+
+
 const onPageUpdate = async () => {
   const response = (await getActivitiesApi({
     search: {
+      all: search.value,
       user_id: authStore.authUser?._id
     },
     page: pagination.value.page,
@@ -40,6 +60,7 @@ onMounted(async () => {
     isLoading.value = true;
     const response = await getActivitiesApi({
       search: {
+        all: search.value,
         user_id: authStore.authUser?._id
       },
       page: pagination.value.page,
@@ -59,6 +80,8 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
+
 </script>
 
 <template>
@@ -67,6 +90,7 @@ onMounted(async () => {
       Data Not Found
     </base-card>
     <template v-else>
+      <base-input v-model="search" placeholder="Search..." />
       <base-card title="Activities">
         <base-table>
           <thead>

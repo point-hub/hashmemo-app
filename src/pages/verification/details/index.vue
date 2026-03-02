@@ -11,15 +11,22 @@ import { useForm, type IForm } from './form';
 import type { IPdfFile, ISignature, ISignatureState, IUser } from '@/types/pdf-signer';
 
 import { getStoragesApi } from '@/composables/api/storages/get.api';
-import PdfSignerViewer from '@/pages/documents/components/pdf-signer-viewer.vue';
+import { getActivitiesApi } from '@/composables/api/activities/get.api';
+import { formatDate } from '@/utils/date';
 
 const route = useRoute();
 const form = useForm();
 
 const isLoading = ref(false);
+const activities = ref()
 onMounted(async () => {
   try {
     isLoading.value = true;
+    activities.value = (await getActivitiesApi({
+      search: {
+        file_id: route.params.id
+      }
+    })).data;
     const response = await findDocumentApi(route.params.id as string);
     if (response) {
       form.data._id = response._id;
@@ -27,10 +34,11 @@ onMounted(async () => {
       form.data.hash = response.hash;
       form.data.certificate_id = response.certificate_id;
       form.data.pdf_url = response.pdf_url;
+      form.data.signatures = response.signatures as unknown as ISignature[];
 
       signaturesJson.value = JSON.stringify(response.signatures)
       state.value.signatures = JSON.stringify(response.signatures) as unknown as ISignature[]
-      console.log(response.pdf_url)
+      
       await handleUploadFromUrl(response.pdf_url!)
     }
   } catch (error) {
@@ -84,7 +92,7 @@ const exporting = (pdfResult: IPdfFile) => {
   // Trigger download
   const a = document.createElement('a');
   a.href = url;
-  a.download = form.data.name + " [SIGNED]";
+  a.download = form.data.name!;
   document.body.appendChild(a);
   a.click();
 
@@ -137,12 +145,8 @@ const handleUploadFromUrl = async (url: string) => {
   }
 };
 
-const pdfViewerRef = ref();
 const handleExport = async () => {
-  await pdfViewerRef.value?.exportPdf();
-};
-const handleExportWithCertificate = async () => {
-  await pdfViewerRef.value?.exportPdf(true);
+  window.print()
 };
 </script>
 
@@ -152,21 +156,76 @@ const handleExportWithCertificate = async () => {
       Data Not Found
     </base-card>
     <template v-else>
-      <pdf-signer-viewer
-        ref="pdfViewerRef"
-        class="shadow"
-        v-model="state"
-        v-model:signaturesJson="signaturesJson"
-        :hash="form.data.hash"
-        :certId="form.data.certificate_id"
-        :pdf-file="pdfFile"
-        :users="form.data.approvals"
-        :current-user="state.currentUser"
-        :dragging-user="draggingUser"
-        :preview="true"
-        @signature:signed="onSigned"
-        @pdf:export="exporting"
-      />
+      <base-card title="Document Information">
+        <base-table>
+          <tbody>
+            <tr>
+              <td>Document Name</td>
+              <td>{{ form.data.name }}</td>
+            </tr>
+            <tr>
+              <td>Certificate ID</td>
+              <td>{{ form.data.certificate_id }}</td>
+            </tr>
+            <tr>
+              <td>Hash Code</td>
+              <td>{{ form.data.hash }}</td>
+            </tr>
+          </tbody>
+        </base-table>
+      </base-card>
+      <base-card title="Signature Details">
+        <div class="flex flex-col gap-4">
+          <base-table v-for="signature in form.data.signatures" class="border border-slate-200">
+            <tbody>
+              <tr>
+                <td>User</td>
+                <td>{{ signature.name }}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{{ signature.email }}</td>
+              </tr>
+              <tr>
+                <td>Role</td>
+                <td>{{ signature.role }}</td>
+              </tr>
+              <tr>
+                <td>Date</td>
+                <td>{{ signature.signed_at ? formatDate(signature.signed_at) : '' }}</td>
+              </tr>
+              <tr>
+                <td>IP Address</td>
+                <td>{{ signature.ip }}</td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>{{ signature.signed ? 'Telah ditandatangani' : '' }}</td>
+              </tr>
+            </tbody>
+          </base-table>
+        </div>
+      </base-card>
+      <base-card title="Audit Trails">
+        <base-table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Name</th>
+              <th>IP Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="activity in activities">
+              <td>{{ formatDate(activity.created_at) }}</td>
+              <td>{{ activity.action }}</td>
+              <td>{{ activity.name }}</td>
+              <td>{{ activity.ip }}</td>
+            </tr>
+          </tbody>
+        </base-table>
+      </base-card>
     </template>
   </app-container>
 </template>
