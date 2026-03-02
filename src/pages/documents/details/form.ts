@@ -15,6 +15,7 @@ export interface IForm {
   name?: string
   hash?: string
   certificate_id?: string
+  status?: string
   approvals?: IFormApproval[]
   signatures?: ISignature[]
 }
@@ -36,6 +37,7 @@ export function useForm() {
     name: undefined,
     approvals: [],
     signatures: undefined,
+    status: undefined,
   };
 
   const defaultFormError: IFormError = {

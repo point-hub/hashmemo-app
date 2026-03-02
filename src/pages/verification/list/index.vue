@@ -24,6 +24,13 @@ const onClick = async () => {
     return
   }
 
+  if (response.data[0]?.status !== 'signed') {
+    toast('dokumen tidak ditemukan', {
+      color: 'danger',
+    });
+    return
+  }
+
   const isIncluded = response.data[0]?.approvals?.some(
     (approval) => approval.user_id === authStore.authUser?._id
   )

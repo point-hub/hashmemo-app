@@ -27,6 +27,7 @@ const props = withDefaults(
     hash?: string
     preview?: boolean
     certId?: string
+    status?: string
   }>(),
   { currentUser: null, signaturesJson: '', preview: false },
 );
@@ -519,6 +520,7 @@ defineExpose({ exportPdf });
       <canvas ref="canvas" />
       <!-- Signatures -->
       <p 
+        v-if="props.status === 'signed'"
         class="absolute font-bold"
         :style="{
           left: '5px',
@@ -528,6 +530,7 @@ defineExpose({ exportPdf });
         Hash: {{ hash }}
       </p>
       <p 
+        v-if="props.status === 'signed'"
         class="absolute font-bold"
         :style="{
           left: '5px',

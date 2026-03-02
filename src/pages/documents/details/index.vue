@@ -28,6 +28,7 @@ onMounted(async () => {
       form.data.hash = response.hash;
       form.data.certificate_id = response.certificate_id;
       form.data.pdf_url = response.pdf_url;
+      form.data.status = response.status;
 
       signaturesJson.value = JSON.stringify(response.signatures)
       state.value.signatures = JSON.stringify(response.signatures) as unknown as ISignature[]
@@ -188,6 +189,7 @@ const handleExportWithCertificate = async () => {
         :current-user="state.currentUser"
         :dragging-user="draggingUser"
         :preview="true"
+        :status="form.data.status"
         @signature:signed="onSigned"
         @pdf:export="exporting"
       />
