@@ -17,8 +17,9 @@ interface IData {
   label: string
 }
 const toggleModal = (data: IData) => {
-  _id.value= data._id;
-  label.value= data.label;
+  _id.value = data._id;
+  label.value = data.label;
+  otp.value = '';
   confirmActionModalRef.value.toggleModal();
 };
 
