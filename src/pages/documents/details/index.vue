@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import AppContainer from '@/components/app-container.vue';
@@ -34,6 +34,8 @@ onMounted(async () => {
       state.value.signatures = JSON.stringify(response.signatures) as unknown as ISignature[]
       console.log(response.pdf_url)
       await handleUploadFromUrl(response.pdf_url!)
+      await nextTick();
+      previewUrl.value = await pdfViewerRef.value?.previewPdf(true);
     }
   } catch (error) {
     const errorResponse = handleError(error);
@@ -140,12 +142,33 @@ const handleUploadFromUrl = async (url: string) => {
 };
 
 const pdfViewerRef = ref();
+const previewUrl = ref();
 const handleExport = async () => {
   await pdfViewerRef.value?.exportPdf();
 };
 const handleExportWithCertificate = async () => {
   await pdfViewerRef.value?.exportPdf(true);
 };
+const handlePreviewWithCertificate = async () => {
+  previewUrl.value = await pdfViewerRef.value?.previewPdf(true);
+};
+const handlePreview = async () => {
+  if (form.data.status === 'signed') {
+    previewUrl.value = await pdfViewerRef.value?.previewPdf(true);
+  } else {
+    previewUrl.value = await pdfViewerRef.value?.previewPdf(false);
+  }
+};
+
+watch(pdfFile, async (file) => {
+  if (!file) return;
+
+  await nextTick();
+
+  if (pdfViewerRef.value) {
+    previewUrl.value = await pdfViewerRef.value.previewPdf(true);
+  }
+});
 </script>
 
 <template>
@@ -160,6 +183,8 @@ const handleExportWithCertificate = async () => {
               Preview
             </base-button>
           </router-link>
+          <!-- <base-button v-if="form.data.status === 'signed'" variant="filled" color="primary" @click="handlePreviewWithCertificate">Preview</base-button>
+          <base-button v-else variant="filled" color="primary" @click="handlePreview">Preview</base-button> -->
           <router-link :to="`/documents/${route.params.id}/history`">
             <base-button variant="filled" color="primary">
               History
@@ -176,9 +201,14 @@ const handleExportWithCertificate = async () => {
       Data Not Found
     </base-card>
     <template v-else>
+      <iframe
+        v-if="previewUrl"
+        :src="previewUrl"
+        class="w-full h-[800px] border"
+      />
       <pdf-signer-viewer
         ref="pdfViewerRef"
-        class="shadow"
+        class="shadow hidden"
         v-model="state"
         v-model:signaturesJson="signaturesJson"
         :hash="form.data.hash"
@@ -191,6 +221,7 @@ const handleExportWithCertificate = async () => {
         :status="form.data.status"
         @signature:signed="onSigned"
         @pdf:export="exporting"
+        @viewer:ready="handlePreview"
       />
     </template>
   </app-container>

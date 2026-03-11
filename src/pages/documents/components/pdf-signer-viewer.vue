@@ -38,6 +38,7 @@ const emit = defineEmits<{
   (e: 'signature:signed', sig: ISignature): void
   (e: 'update:signaturesJson', value: string): void
   (e: 'pdf:export', result: IPdfFile): void
+  (e: 'viewer:ready'): void
 }>();
 
 // -------------------- refs --------------------
@@ -197,6 +198,7 @@ const renderPdf = async () => {
       y += PAGE_GAP;
     }
   }
+  emit('viewer:ready');
 };
 
 // -------------------- add signature --------------------
@@ -505,7 +507,163 @@ const exportPdf = async (withCertificate = false) => {
   }
 };
 
-defineExpose({ exportPdf });
+const previewPdf = async (withCertificate = false) => {
+  if (!pdfBytes.value) return;
+
+  try {
+    const doc = await PDFDocument.load(pdfBytes.value);
+    doc.registerFontkit(fontkit);
+
+    const helveticaBold = await doc.embedFont(StandardFonts.HelveticaBold);
+    const helvetica = await doc.embedFont(StandardFonts.Helvetica);
+
+    let sigFont;
+    try {
+      const fBytes = await fetch(dancingScriptUrl).then(res => res.arrayBuffer());
+      sigFont = await doc.embedFont(fBytes);
+    } catch {
+      sigFont = await doc.embedFont(StandardFonts.TimesRomanItalic);
+    }
+
+    if (withCertificate) {
+      const page = doc.getPage(0);
+      page.drawText("Hash: " + props.hash, { x: 2, y: page.getHeight() - 15, size: 9, font: helveticaBold, color: rgb(0, 0, 0) });
+      page.drawText("Certificate ID:" + props.certId, { x: 2, y: page.getHeight() - 25, size: 9, font: helveticaBold, color: rgb(0, 0, 0) });
+    }
+    for (const sig of state.value.signatures) {
+      if (!sig.signed) continue;
+
+      const page = doc.getPage(sig.page - 1);
+      const { height: pHeight } = page.getSize();
+      const layout = pageLayouts.value.find(l => l.page === sig.page);
+      if (!layout) continue;
+
+      // Coordinate Conversions
+      const x = Number(sig.x);
+      const pdfYTop = pHeight - (Number(sig.y) - layout.start);
+      const sH = Number(40);
+      const pdfYBot = pdfYTop - sH;
+
+      const color = rgb(0.12, 0.35, 0.59);
+      const bRad = 8;
+      const bWid = 40;
+
+      // 1. Draw Rounded Bracket
+      const topY = pdfYTop;
+      const bottomY = pdfYBot;
+
+      // Draw vertical line
+      page.drawLine({
+        start: { x: x, y: bottomY + bRad },
+        end: { x: x, y: topY - bRad },
+        color,
+        thickness: 1.5,
+      });
+
+      // Top-left quarter circle approximated with lines
+      const topCenterX = x + bRad;
+      const topCenterY = topY - bRad;
+      const topStartAngle = Math.PI; // 180°
+      const topEndAngle = Math.PI / 2; // 90°
+      const steps = 20; // Number of line segments for approximation
+      
+      for (let i = 0; i < steps; i++) {
+        const angle1 = topStartAngle + (topEndAngle - topStartAngle) * (i / steps);
+        const angle2 = topStartAngle + (topEndAngle - topStartAngle) * ((i + 1) / steps);
+        const x1 = topCenterX + bRad * Math.cos(angle1);
+        const y1 = topCenterY + bRad * Math.sin(angle1);
+        const x2 = topCenterX + bRad * Math.cos(angle2);
+        const y2 = topCenterY + bRad * Math.sin(angle2);
+        page.drawLine({
+          start: { x: x1, y: y1 },
+          end: { x: x2, y: y2 },
+          color,
+          thickness: 1.5,
+        });
+      }
+
+      // Bottom-left quarter circle approximated with lines
+      const bottomCenterX = x + bRad;
+      const bottomCenterY = bottomY + bRad;
+      const bottomStartAngle = Math.PI; // 180°
+      const bottomEndAngle = 3 * Math.PI / 2; // 270°
+      for (let i = 0; i < steps; i++) {
+        const angle1 = bottomStartAngle + (bottomEndAngle - bottomStartAngle) * (i / steps);
+        const angle2 = bottomStartAngle + (bottomEndAngle - bottomStartAngle) * ((i + 1) / steps);
+        const x1 = bottomCenterX + bRad * Math.cos(angle1);
+        const y1 = bottomCenterY + bRad * Math.sin(angle1);
+        const x2 = bottomCenterX + bRad * Math.cos(angle2);
+        const y2 = bottomCenterY + bRad * Math.sin(angle2);
+        page.drawLine({
+          start: { x: x1, y: y1 },
+          end: { x: x2, y: y2 },
+          color,
+          thickness: 1.5,
+        });
+      }
+
+      // Top horizontal line
+      page.drawLine({
+        start: { x: x + bRad, y: topY },
+        end: { x: x + bWid, y: topY },
+        color,
+        thickness: 1.5,
+      });
+
+      // Bottom horizontal line
+      page.drawLine({
+        start: { x: x + bRad, y: bottomY },
+        end: { x: x + bWid, y: bottomY },
+        color,
+        thickness: 1.5,
+      });
+
+      // 2. White-out masks for text cutouts
+      const topTxt = 'Signed by:';
+      const hashTxt = props.pdfFile?.hash?.substring(0, 16) || '';
+      const tW = helveticaBold.widthOfTextAtSize(topTxt, 7);
+
+      // Top mask: Shifted slightly up (y + 1) and taller to ensure the blue line is fully covered
+      page.drawRectangle({
+        x: x + 8,
+        y: pdfYTop - 5, // Slightly lower than the line to cover the stroke width
+        width: tW + 4,
+        height: 10,
+        color: rgb(1, 1, 1),
+        opacity: 1,
+      });
+
+      if (hashTxt) {
+        const hW = helvetica.widthOfTextAtSize(hashTxt, 6);
+        page.drawRectangle({
+          x: x + 8,
+          y: pdfYBot - 4,
+          width: hW + 4,
+          height: 8,
+          color: rgb(1, 1, 1),
+        });
+      }
+
+      // 3. Draw Text
+      page.drawText(topTxt, { x: x + 10, y: pdfYTop - 3, size: 9, font: helveticaBold, color: rgb(0, 0, 0) });
+      page.drawText(sig.initial_name || sig.name, { x: x + 15, y: pdfYTop - (sH / 2) - 6, size: 18, font: sigFont, color: rgb(0, 0, 0) });
+      if (hashTxt) page.drawText(hashTxt, { x: x + 10, y: pdfYBot - 3, size: 9, font: helvetica, color: rgb(0.3, 0.3, 0.3) });
+    }
+
+    const bytes = await doc.save();
+
+    const blob = new Blob([bytes as unknown as any], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+
+    return url;
+
+    // window.open(url, '_blank');
+  } catch (err) {
+    console.error('Export Error:', err);
+  }
+};
+
+defineExpose({ exportPdf, previewPdf });
 </script>
 
 <template>
