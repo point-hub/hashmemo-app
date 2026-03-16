@@ -66,7 +66,7 @@ const onSave = async () => {
   <base-card title="Assign Signer to Document">
     <div class="overflow-auto flex gap-4 h-full p-4">
       <!-- PDF Viewer -->
-      <div class="w-full h-full max-h-screen overflow-auto shadow">
+      <div class="w-[210mm]! h-[297mm]! max-h-screen overflow-auto shadow">
         <pdf-signer-viewer
           class="shadow"
           v-model="state"
@@ -80,7 +80,7 @@ const onSave = async () => {
         />
       </div>
 
-      <div class="max-w-80 min-w-80 flex flex-col h-full">
+      <div class="lg:max-w-80 lg:min-w-80 flex flex-col h-full">
         <h1 class="font-bold">Signer</h1>
         <pdf-signer-panel
           :users="data.approvals!"

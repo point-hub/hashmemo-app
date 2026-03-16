@@ -73,10 +73,18 @@ const state = defineModel<ISignatureState>({
 const clamp = (v: number, min: number, max: number) =>
   Math.min(Math.max(v, min), max);
 
-const computeScale = (pageWidth: number) => {
-  const w = containerRef.value?.clientWidth;
-  if (!w) return DEFAULT_INITIAL_SCALE;
-  return Math.min(DEFAULT_MAX_SCALE, Math.max(DEFAULT_MIN_SCALE, w / pageWidth));
+// const computeScale = (pageWidth: number) => {
+//   const w = containerRef.value?.clientWidth;
+//   if (!w) return DEFAULT_INITIAL_SCALE;
+//   return Math.min(DEFAULT_MAX_SCALE, Math.max(DEFAULT_MIN_SCALE, w / pageWidth));
+// };
+
+const computeScale = (pageWidth: number, pageHeight: number) => {
+  const containerWidth = containerRef.value?.clientWidth || 0;
+
+  const scaleByWidth = containerWidth / pageWidth;
+
+  return clamp(scaleByWidth, DEFAULT_MIN_SCALE, DEFAULT_MAX_SCALE);
 };
 
 const updateSignaturesJson = () => {
@@ -171,7 +179,8 @@ const renderPdf = async () => {
   state.value.pageSize.width = maxWidth;
   state.value.pageSize.height = totalHeight;
 
-  scale.value = computeScale(maxWidth);
+  // scale.value = computeScale(maxWidth);
+  scale.value = computeScale(maxWidth, totalHeight);
 
   const ctx = canvas.value.getContext('2d')!;
   canvas.value.width = maxWidth * scale.value;
@@ -539,8 +548,8 @@ const previewPdf = async (withCertificate = false) => {
       if (!layout) continue;
 
       // Coordinate Conversions
-      const x = Number(sig.x);
-      const pdfYTop = pHeight - (Number(sig.y) - layout.start);
+      const x = Number(sig.x) + 5;
+      const pdfYTop = pHeight - (Number(sig.y) - layout.start) - 10;
       const sH = Number(40);
       const pdfYBot = pdfYTop - sH;
 
@@ -667,7 +676,7 @@ defineExpose({ exportPdf, previewPdf });
 </script>
 
 <template>
-  <div class="flex flex-col h-full w-full overflow-hidden">
+  <div class="flex flex-col w-[210mm]! h-[297mm]! overflow-hidden">
     <div
       ref="containerRef"
       class="flex-1 overflow-auto relative"
@@ -675,7 +684,7 @@ defineExpose({ exportPdf, previewPdf });
       @drop="onDrop"
     >
       <!-- Canvas for rendering PDF -->
-      <canvas ref="canvas" />
+      <canvas ref="canvas" class="mx-auto block max-w-full" />
       <!-- Signatures -->
       <p 
         v-if="props.status === 'signed'"
