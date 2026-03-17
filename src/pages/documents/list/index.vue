@@ -176,7 +176,7 @@ const isFolderFiltered = (folder_id: string) => {
 }
 
 const isShowSignAction = (document: IDocumentData) => {
-  if (document.status !== 'pending') {
+  if (document.status === 'voided' || document.status === 'rejected') {
     return false
   }
 
