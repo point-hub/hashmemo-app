@@ -176,7 +176,7 @@ const isFolderFiltered = (folder_id: string) => {
 }
 
 const isShowSignAction = (document: IDocumentData) => {
-  if (document.status !== 'awaiting-signature') {
+  if (document.status !== 'pending') {
     return false
   }
 
@@ -341,7 +341,7 @@ const isShowSignAction = (document: IDocumentData) => {
                             <p class="flex-1">Move</p>
                           </base-button>
                           <base-divider orientation="vertical" class="my-0!" />
-                          <base-button v-if="document.status === 'awaiting-signature'" @click="voidDocument(folderIndex, rowIndex, document._id)" variant="text" color="info" class="w-full py-1! px-3! m-0! flex gap-2! items-center justify-start text-left!">
+                          <base-button v-if="document.status === 'pending'" @click="voidDocument(folderIndex, rowIndex, document._id)" variant="text" color="info" class="w-full py-1! px-3! m-0! flex gap-2! items-center justify-start text-left!">
                             <p class="flex-1">Void</p>
                           </base-button>
                         </div>
