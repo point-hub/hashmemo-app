@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import AppContainer from '@/components/app-container.vue';
@@ -169,6 +169,33 @@ watch(pdfFile, async (file) => {
     previewUrl.value = await pdfViewerRef.value.previewPdf(true);
   }
 });
+
+const iframeSrc = ref<string | null>(null);
+
+watch(previewUrl, async (url) => {
+  if (!url) {
+    iframeSrc.value = null;
+    return;
+  }
+
+  try {
+    // fetch the blob from blob URL
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    // convert to base64
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      iframeSrc.value = reader.result as string;
+    };
+
+    reader.readAsDataURL(blob);
+  } catch (err) {
+    console.error('Failed to convert blob to base64:', err);
+    iframeSrc.value = null;
+  }
+});
 </script>
 
 <template>
@@ -202,8 +229,8 @@ watch(pdfFile, async (file) => {
     </base-card>
     <template v-else>
       <iframe
-        v-if="previewUrl"
-        :src="previewUrl"
+        v-if="iframeSrc"
+        :src="iframeSrc"
         class="w-full h-[800px] border"
       />
       <pdf-signer-viewer
