@@ -9,7 +9,7 @@ import { rejectDocumentApi } from '@/composables/api/documents/reject.api';
 const confirmActionModalRef = ref();
 const _id = ref();
 const label = ref();
-const emit = defineEmits(['deleted']);
+const emit = defineEmits(['rejected']);
 
 interface IData {
   _id: string
@@ -30,7 +30,7 @@ const onReject = async (reason: string) => {
   try {
     await rejectDocumentApi(_id.value as string, reason);
     toast(`Reject Document success`, { color: 'success' });
-    emit('deleted');
+    emit('rejected');
   } catch (error) {
     const errorResponse = handleError(error);
     if (errorResponse.message) {
