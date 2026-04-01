@@ -216,7 +216,7 @@ watch(previewUrl, async (url) => {
               Preview
             </base-button>
           </router-link>
-          <base-button variant="filled" color="info" @click="handleOpenPdf" class="lg:hidden">
+          <base-button variant="filled" color="primary" @click="handleOpenPdf" class="lg:hidden">
             Preview
           </base-button>
           <!-- <base-button v-if="form.data.status === 'signed'" variant="filled" color="primary" @click="handlePreviewWithCertificate">Preview</base-button>
