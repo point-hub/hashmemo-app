@@ -172,6 +172,12 @@ watch(pdfFile, async (file) => {
 
 const iframeSrc = ref<string | null>(null);
 
+const handleOpenPdf = () => {
+  if (previewUrl.value) {
+    window.open(previewUrl.value, '_blank');
+  }
+};
+
 watch(previewUrl, async (url) => {
   if (!url) {
     iframeSrc.value = null;
@@ -205,11 +211,14 @@ watch(previewUrl, async (url) => {
     <base-card>
       <div class="flex gap-2 justify-between">
         <div class="flex gap-2">
-          <router-link :to="`/documents/${route.params.id}`">
+          <router-link :to="`/documents/${route.params.id}`" class="hidden lg:block">
             <base-button variant="filled" color="info">
               Preview
             </base-button>
           </router-link>
+          <base-button variant="filled" color="info" @click="handleOpenPdf" class="lg:hidden">
+            Preview
+          </base-button>
           <!-- <base-button v-if="form.data.status === 'signed'" variant="filled" color="primary" @click="handlePreviewWithCertificate">Preview</base-button>
           <base-button v-else variant="filled" color="primary" @click="handlePreview">Preview</base-button> -->
           <router-link :to="`/documents/${route.params.id}/history`">
@@ -231,7 +240,7 @@ watch(previewUrl, async (url) => {
       <iframe
         v-if="iframeSrc"
         :src="iframeSrc"
-        class="w-full h-[800px] border"
+        class="w-full h-[800px] border hidden lg:block"
       />
       <pdf-signer-viewer
         ref="pdfViewerRef"
