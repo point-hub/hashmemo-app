@@ -134,11 +134,13 @@ onMounted(async () => {
       </div>
     </div>
     <div v-if="step === 3" class="flex flex-col gap-2">
+      <base-card>
+        <div class="flex gap-2">
+          <base-button class="px-4!" :is-loading="isSaving" color="primary" @click="save">Send</base-button>
+        </div>
+      </base-card>
+      
       <card-assign v-model:data="form.data" v-model:pdfFile="pdfFile" v-model:signaturesJson="signaturesJson" v-model:errors="form.errors" v-model:is-saving="isSaving" />
-
-      <div class="flex gap-2">
-        <base-button class="flex-1" :is-loading="isSaving" color="primary" @click="save">Save</base-button>
-      </div>
     </div>
   </div>
 </template>
