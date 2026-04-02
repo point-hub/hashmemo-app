@@ -12,13 +12,14 @@ const folders = ref<{ _id: string, name: string }[]>()
 const confirmActionModalRef = ref();
 const _id = ref();
 const emit = defineEmits(['updated']);
-const { options: folderOptions, searchFolder } = useSelectableFolders();
+const { options: folderOptions, searchFolder, getFolders } = useSelectableFolders();
 
 interface IData {
   _id: string
 }
 const toggleModal = async (data: IData) => {
   _id.value = data._id;
+  await getFolders()
   folders.value = (await getFoldersApi()).data
   confirmActionModalRef.value.toggleModal();
 };
