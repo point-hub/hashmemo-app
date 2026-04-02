@@ -62,9 +62,10 @@ defineExpose({
     @success="onSign"
   >
     <div>
-      <p>Please enter the OTP code to sign this document.</p>
-      <p>OTP serves to ensure that the person signing is really you.</p>
-      <br />
+      <p>We have sent you an OTP to sign the document.</p>
+      <p><b>{{ label }}</b></p>
+      <br>
+      <p>Please enter the OTP here.</p>
       <base-input v-model="otp" autofocus />
     </div>
   </base-confirm-action-modal>

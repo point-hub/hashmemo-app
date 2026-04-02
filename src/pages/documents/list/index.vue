@@ -109,8 +109,8 @@ const voidedDocument = async () => {
 }
 
 const signDocumentModalRef = ref()
-const signDocument = async (_id: string) => {
-  signDocumentModalRef.value.toggleModal({ _id });
+const signDocument = async (_id: string, name: string) => {
+  signDocumentModalRef.value.toggleModal({ _id, label: name  });
   await otpDocumentApi(_id)
 }
 const signedDocument = async () => {
@@ -316,7 +316,7 @@ const isShowSignAction = (document: IDocumentData) => {
                     class="px-4! mx-1"
                     variant="filled"
                     color="primary"
-                    @click="signDocument(document._id)"
+                    @click="signDocument(document._id, document.name)"
                   >
                     Sign
                   </base-button>
