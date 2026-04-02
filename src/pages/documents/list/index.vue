@@ -217,7 +217,7 @@ const isShowSignAction = (document: IDocumentData) => {
             Ditugaskan kepada saya
           </base-button>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2" v-if="authStore.authUser?.role?.name === 'admin'">
           <base-button @click="addFolder" color="primary" shape="sharp" class="font-bold px-4!">
             Add Folder
           </base-button>
@@ -257,7 +257,7 @@ const isShowSignAction = (document: IDocumentData) => {
         <div class="flex gap-2 items-center">
           <base-icon icon="i-fa7-regular:folder" />
           <p>{{ folder.name }}</p>
-          <base-popover placement="bottom" ref="folderRef">
+          <base-popover placement="bottom" ref="folderRef" v-if="authStore.authUser?.role?.name === 'admin'">
             <base-button @click="folderRef[folderIndex].toggle()">
               <base-icon icon="i-fa7-solid:ellipsis" />
             </base-button>
@@ -330,7 +330,7 @@ const isShowSignAction = (document: IDocumentData) => {
                   >
                     Reject
                   </base-button>
-                  <base-popover placement="bottom" :ref="(el: unknown) => setRowMenuRef(el, folderIndex, rowIndex)">
+                  <base-popover v-if="authStore.authUser?.role?.name === 'admin'" placement="bottom" :ref="(el: unknown) => setRowMenuRef(el, folderIndex, rowIndex)">
                     <base-button @click="toggleMenu(folderIndex, rowIndex)">
                       <base-icon icon="i-fa7-solid:ellipsis" />
                     </base-button>
