@@ -5,12 +5,14 @@ import BaseConfirmActionModal from '@/components/base-confirm-action-modal.vue';
 import { toast } from '@/toast';
 import { handleError } from '@/utils/api';
 import { signDocumentApi } from '@/composables/api/documents/sign.api';
+import { useAuthStore } from '@/stores/auth.store';
 
 const confirmActionModalRef = ref();
 const _id = ref();
 const label = ref();
 const otp = ref();
 const emit = defineEmits(['signed']);
+const authStore = useAuthStore()
 
 interface IData {
   _id: string
@@ -62,7 +64,7 @@ defineExpose({
     @success="onSign"
   >
     <div>
-      <p>We have sent you an OTP to sign the document.</p>
+      <p>Kode OTP telah kami kirim ke email Anda ({{authStore.authUser?.email}}). Silakan masukkan kode OTP terbaru. Setiap kali Anda menutup dan membuka kembali pop-up ini, sistem akan mengirimkan kode OTP yang baru.</p>
       <p><b>{{ label }}</b></p>
       <br>
       <p>Please enter the OTP here.</p>
