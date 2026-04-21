@@ -186,7 +186,7 @@ const loadDocuments = async () => {
       status: filter.value.status,
       tab: filter.value.tab
     },
-    sort: sortObjectToString(sort.value)
+    sort: sortObjectToString(sort.value as Record<string, 1 | 0 | -1>)
   })).data
 }
 
