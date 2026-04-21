@@ -156,7 +156,7 @@ const loadDocuments = async () => {
 }
 
 const statusOptions = ref([
-  { value: 'awaiting-signature', label: 'awaiting-signature' },
+  { value: 'in-progress', label: 'in-progress' },
   { value: 'signed', label: 'signed' },
   { value: 'voided', label: 'voided' },
   { value: 'rejected', label: 'rejected' },
