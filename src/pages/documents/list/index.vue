@@ -218,9 +218,9 @@ const isShowSignAction = (document: IDocumentData) => {
           </base-button>
         </div>
         <div class="flex gap-2" v-if="authStore.authUser?.role?.name === 'admin'">
-          <base-button @click="addFolder" color="primary" shape="sharp" class="font-bold px-4!">
+          <!-- <base-button @click="addFolder" color="primary" shape="sharp" class="font-bold px-4!">
             Add Folder
-          </base-button>
+          </base-button> -->
           <router-link to="/documents/upload">
             <base-button color="primary" shape="sharp" class="font-bold px-4!">
               Upload Document
@@ -255,12 +255,12 @@ const isShowSignAction = (document: IDocumentData) => {
       <template v-for="(folder, folderIndex) in folders">
       <div class="flex flex-col gap-4" v-if="!isFolderFiltered(folder._id)">
         <div class="flex gap-2 items-center">
-          <base-icon icon="i-fa7-regular:folder" />
-          <p>{{ folder.name }}</p>
+          <!-- <base-icon icon="i-fa7-regular:folder" /> -->
+          <!-- <p>{{ folder.name }}</p> -->
           <base-popover placement="bottom" ref="folderRef" v-if="authStore.authUser?.role?.name === 'admin'">
-            <base-button @click="folderRef[folderIndex].toggle()">
+            <!-- <base-button @click="folderRef[folderIndex].toggle()">
               <base-icon icon="i-fa7-solid:ellipsis" />
-            </base-button>
+            </base-button> -->
             <template #content>
               <base-card class="p-0! gap-0! -mt-2" shadow>
                 <div class="flex flex-col">
@@ -331,15 +331,15 @@ const isShowSignAction = (document: IDocumentData) => {
                     Reject
                   </base-button>
                   <base-popover v-if="authStore.authUser?.role?.name === 'admin'" placement="bottom" :ref="(el: unknown) => setRowMenuRef(el, folderIndex, rowIndex)">
-                    <base-button @click="toggleMenu(folderIndex, rowIndex)">
+                    <base-button @click="toggleMenu(folderIndex, rowIndex)" v-if="document.status === 'pending'">
                       <base-icon icon="i-fa7-solid:ellipsis" />
                     </base-button>
                     <template #content>
                       <base-card class="p-0! gap-0! -mt-2" shadow>
                         <div class="flex flex-col">
-                          <base-button @click="moveDocument(folderIndex, rowIndex, document._id)" variant="text" color="info" class="w-full py-1! px-3! m-0! flex gap-2! items-center justify-start text-left!">
+                          <!-- <base-button @click="moveDocument(folderIndex, rowIndex, document._id)" variant="text" color="info" class="w-full py-1! px-3! m-0! flex gap-2! items-center justify-start text-left!">
                             <p class="flex-1">Move</p>
-                          </base-button>
+                          </base-button> -->
                           <base-divider orientation="vertical" class="my-0!" />
                           <base-button v-if="document.status === 'pending'" @click="voidDocument(folderIndex, rowIndex, document._id)" variant="text" color="info" class="w-full py-1! px-3! m-0! flex gap-2! items-center justify-start text-left!">
                             <p class="flex-1">Void</p>
