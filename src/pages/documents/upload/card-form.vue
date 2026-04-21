@@ -35,6 +35,10 @@ const onSelectedApproval = (selected: IFormApproval, approval: IFormApproval) =>
   approval.email = selected.email;
   approval.initial_name = selected.initial_name;
 };
+
+const removeApproval = (index: number) => {
+  data.value.approvals?.splice(index, 1)
+}
 </script>
 
 <template>
@@ -45,6 +49,7 @@ const onSelectedApproval = (selected: IFormApproval, approval: IFormApproval) =>
           <tr>
             <th>User</th>
             <th>Role</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -72,6 +77,9 @@ const onSelectedApproval = (selected: IFormApproval, approval: IFormApproval) =>
                 border="none"
                 paddingless
               />
+            </td>
+            <td class="text-right">
+              <button @click="removeApproval(rowIndex)"><i class="i-fa7-solid:x"></i></button>
             </td>
           </tr>
         </tbody>
