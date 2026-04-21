@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watchDebounced } from '@vueuse/core';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import AddFolderModal from '../components/add-folder-modal.vue';
 import RenameFolderModal from '../components/rename-folder-modal.vue';
 import DeleteFolderModal from '../components/delete-folder-modal.vue';
@@ -28,12 +28,46 @@ const filter = ref({
   tab: 1,
 })
 
+const sort = ref<Record<string, number>>({
+  name: 0,
+  created_at: 0,
+  created_by_id: 0,
+  status: 0,
+});
+
+const toggleSort = (key: string) => {
+  const current = sort.value[key] ?? 0;
+
+  if (current === 0) {
+    sort.value[key] = 1;
+  } else if (current === 1) {
+    sort.value[key] = -1;
+  } else {
+    sort.value[key] = 0;
+  }
+};
+
+const sortObjectToString = (sort: Record<string, 1 | 0 | -1>): string => {
+  return Object.entries(sort)
+    .filter(([, value]) => value !== 0)
+    .map(([key, value]) => (value === -1 ? `-${key}` : key))
+    .join(',');
+};
+
 const setRowMenuRef = (el: any, folderIndex: number, rowIndex: number) => {
   if (el) {
     const key = `${folderIndex}-${rowIndex}`;
     rowMenuRef.value[key] = el;
   }
 };
+
+watch(
+  sort,
+  async () => {
+    await loadDocuments()
+  },
+  { deep: true }
+);
 
 const toggleMenu = (folderIndex: number, rowIndex: number) => {
   const key = `${folderIndex}-${rowIndex}`;
@@ -151,7 +185,8 @@ const loadDocuments = async () => {
       folder: filter.value.folder,
       status: filter.value.status,
       tab: filter.value.tab
-    }
+    },
+    sort: sortObjectToString(sort.value)
   })).data
 }
 
@@ -217,7 +252,7 @@ const isShowSignAction = (document: IDocumentData) => {
             Ditugaskan kepada saya
           </base-button>
         </div>
-        <div class="flex gap-2" v-if="authStore.authUser?.role?.name === 'admin'">
+        <div class="flex gap-2">
           <!-- <base-button @click="addFolder" color="primary" shape="sharp" class="font-bold px-4!">
             Add Folder
           </base-button> -->
@@ -279,10 +314,46 @@ const isShowSignAction = (document: IDocumentData) => {
           <base-table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Created By</th>
-                <th>Created At</th>
-                <th>Status</th>
+                <th>
+                  <div class="flex items-center gap-2 whitespace-nowrap">
+                    <base-button size="xs" class="p-0!" @click="toggleSort('name')">
+                      <base-icon v-if="sort['name'] === 0" icon="i-solar:square-sort-vertical-outline" />
+                      <base-icon v-if="sort['name'] === 1" icon="i-heroicons-solid:sort-ascending" />
+                      <base-icon v-if="sort['name'] === -1" icon="i-heroicons-solid:sort-descending" />
+                    </base-button>
+                    <span>Name</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="flex items-center gap-2 whitespace-nowrap">
+                    <base-button size="xs" class="p-0!" @click="toggleSort('created_by_id')">
+                      <base-icon v-if="sort['created_by_id'] === 0" icon="i-solar:square-sort-vertical-outline" />
+                      <base-icon v-if="sort['created_by_id'] === 1" icon="i-heroicons-solid:sort-ascending" />
+                      <base-icon v-if="sort['created_by_id'] === -1" icon="i-heroicons-solid:sort-descending" />
+                    </base-button>
+                    <span>Created By</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="flex items-center gap-2 whitespace-nowrap">
+                    <base-button size="xs" class="p-0!" @click="toggleSort('created_at')">
+                      <base-icon v-if="sort['created_at'] === 0" icon="i-solar:square-sort-vertical-outline" />
+                      <base-icon v-if="sort['created_at'] === 1" icon="i-heroicons-solid:sort-ascending" />
+                      <base-icon v-if="sort['created_at'] === -1" icon="i-heroicons-solid:sort-descending" />
+                    </base-button>
+                    <span>Created At</span>
+                  </div>
+                </th>
+                <th>
+                  <div class="flex items-center gap-2 whitespace-nowrap">
+                    <base-button size="xs" class="p-0!" @click="toggleSort('status')">
+                      <base-icon v-if="sort['status'] === 0" icon="i-solar:square-sort-vertical-outline" />
+                      <base-icon v-if="sort['status'] === 1" icon="i-heroicons-solid:sort-ascending" />
+                      <base-icon v-if="sort['status'] === -1" icon="i-heroicons-solid:sort-descending" />
+                    </base-button>
+                    <span>Status</span>
+                  </div>
+                </th>
                 <th></th>
                 <th></th>
               </tr>
