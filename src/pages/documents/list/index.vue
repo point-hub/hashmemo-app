@@ -270,12 +270,12 @@ const isShowSignAction = (document: IDocumentData) => {
           class="flex-1" 
         />
         <div class="flex gap-2">
-          <base-choosen
+          <!-- <base-choosen
             title="Folder"
             placeholder="All Folders"
             v-model="filter.folder"
             :options="folderOptions"
-          />
+          /> -->
           <base-choosen
             title="Status"
             placeholder="Status Documents"
