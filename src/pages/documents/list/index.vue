@@ -31,7 +31,7 @@ const filter = ref({
 const sort = ref<Record<string, number>>({
   name: 0,
   created_at: 0,
-  created_by_id: 0,
+  'created_by._id': 0,
   status: 0,
 });
 
@@ -326,10 +326,10 @@ const isShowSignAction = (document: IDocumentData) => {
                 </th>
                 <th>
                   <div class="flex items-center gap-2 whitespace-nowrap">
-                    <base-button size="xs" class="p-0!" @click="toggleSort('created_by_id')">
-                      <base-icon v-if="sort['created_by_id'] === 0" icon="i-solar:square-sort-vertical-outline" />
-                      <base-icon v-if="sort['created_by_id'] === 1" icon="i-heroicons-solid:sort-ascending" />
-                      <base-icon v-if="sort['created_by_id'] === -1" icon="i-heroicons-solid:sort-descending" />
+                    <base-button size="xs" class="p-0!" @click="toggleSort('created_by._id')">
+                      <base-icon v-if="sort['created_by._id'] === 0" icon="i-solar:square-sort-vertical-outline" />
+                      <base-icon v-if="sort['created_by._id'] === 1" icon="i-heroicons-solid:sort-ascending" />
+                      <base-icon v-if="sort['created_by._id'] === -1" icon="i-heroicons-solid:sort-descending" />
                     </base-button>
                     <span>Created By</span>
                   </div>
