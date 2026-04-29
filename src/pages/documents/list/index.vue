@@ -401,7 +401,7 @@ const isShowSignAction = (document: IDocumentData) => {
                   >
                     Reject
                   </base-button>
-                  <base-popover v-if="authStore.authUser?.role?.name === 'admin'" placement="bottom" :ref="(el: unknown) => setRowMenuRef(el, folderIndex, rowIndex)">
+                  <base-popover placement="bottom" :ref="(el: unknown) => setRowMenuRef(el, folderIndex, rowIndex)">
                     <base-button @click="toggleMenu(folderIndex, rowIndex)" v-if="document.status === 'pending'">
                       <base-icon icon="i-fa7-solid:ellipsis" />
                     </base-button>
