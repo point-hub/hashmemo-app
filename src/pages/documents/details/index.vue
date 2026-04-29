@@ -211,12 +211,12 @@ watch(previewUrl, async (url) => {
     <base-card>
       <div class="flex gap-2 justify-between">
         <div class="flex gap-2">
-          <router-link :to="`/documents/${route.params.id}`" class="hidden lg:block">
+          <!-- <router-link :to="`/documents/${route.params.id}`" class="hidden lg:block">
             <base-button variant="filled" color="info">
               Preview
             </base-button>
-          </router-link>
-          <base-button variant="filled" color="primary" @click="handleOpenPdf" class="!lg:hidden">
+          </router-link> -->
+          <base-button variant="filled" color="primary" @click="handleOpenPdf">
             Preview
           </base-button>
           <!-- <base-button v-if="form.data.status === 'signed'" variant="filled" color="primary" @click="handlePreviewWithCertificate">Preview</base-button>
