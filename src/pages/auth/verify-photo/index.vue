@@ -23,7 +23,7 @@ let stream: MediaStream | null = null;
 
 const startCamera = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'environment' },
+    video: { facingMode: 'user' },
   });
   if (video.value) video.value.srcObject = stream;
 };
