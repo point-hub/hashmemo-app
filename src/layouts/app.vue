@@ -88,7 +88,7 @@ onMounted(() => {
   });
   
   appMenu.value[0]?.menu?.push({
-    name: 'Verification Document',
+    name: 'Verify Document',
     path: '/verification'
   });
 });

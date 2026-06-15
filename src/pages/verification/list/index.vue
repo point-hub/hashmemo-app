@@ -51,7 +51,7 @@ const onClick = async () => {
         <p>Masukan kode verifikasi untuk memastikan keaslian dan integritasnya.</p>
         <p>Sistem kami akan memeriksa apakah dokumen ini telah terdaftar dan belum mengalami perubahan sejak ditandatangani.</p>
         <base-input v-model="code" placeholder="Masukan kode verifikasi dokumen" class="my-4" />
-        <base-button @click="onClick" variant="filled" color="primary">Verification Document</base-button>
+        <base-button @click="onClick" variant="filled" color="primary">Verify Document</base-button>
       </div>
     </base-card>
   </div>
