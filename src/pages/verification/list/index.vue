@@ -13,7 +13,8 @@ const authStore = useAuthStore()
 const onClick = async () => {
   const response = await getDocumentsApi({
     search: {
-      hash: code.value
+      hash: code.value,
+      is_hash: true
     }
   })
 
