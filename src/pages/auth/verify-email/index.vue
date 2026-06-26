@@ -38,6 +38,10 @@ onMounted(async () => {
 const onSubmit = async () => {
   isSaving.value = true;
   try {
+    if ((form.data.value.code?.length ?? 0) == 0) {
+      return toast('Please insert valid code from the email', { color: 'danger' });
+    }
+
     if ((form.errors.value.password?.length ?? 0) > 0) {
       return toast('Please use a strong password', { color: 'danger' });
     }
@@ -154,7 +158,7 @@ watchDebounced(() => (form.data.value.code), async () => {
   <base-card class="max-w-xl">
     <form @submit.prevent="onSubmit" class="flex flex-col gap-8">
       <div class="flex flex-col gap-8">
-        <base-input required v-model="form.data.value.code" :errors="form.errors.value.code" label="Code" layout="vertical" />
+        <base-input required readonly v-model="form.data.value.code" :errors="form.errors.value.code" label="Code" layout="vertical" />
         <div class="flex flex-col gap-1" v-if="form.data.value.username">
           <base-input required readonly v-model="form.data.value.username" :errors="form.errors.value.username" label="Username" layout="vertical" />
           <base-input required readonly v-model="form.data.value.email" :errors="form.errors.value.email" label="Email" layout="vertical" />
