@@ -58,7 +58,6 @@ const removeApproval = (index: number) => {
               <base-choosen
                 title="User"
                 v-model="approval.user_id"
-                v-model:search="searchUser"
                 @select="(selected: IFormApproval) => onSelectedApproval(selected, approval)"
                 :options="userOptions"
                 :errors="errors?.[`approvals.${rowIndex}.user_id`]"
